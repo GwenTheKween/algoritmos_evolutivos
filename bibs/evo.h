@@ -10,7 +10,7 @@ public:
 	virtual individuo transa(individuo); //transa com uma pessoa soh
 	virtual individuo transa(std::vector<individuo>); //suruba com n pessoas
 	//range da mutacao e probabilidade que um gene sofra mutacao. se <=0, 1 gene eh escolhido aleatoriamente
-	virtual void mutacao(int, int);
+	virtual void mutacao(int, int = 0);
 	virtual double avalia();
 };
 
@@ -24,4 +24,5 @@ public:
 	evolutivo(std::vector<type>);
 	~evolutivo();
 	void itera(int = 1); //faz n iteracoes
+	double get_best();
 };
