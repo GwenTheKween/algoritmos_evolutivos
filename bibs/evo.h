@@ -14,14 +14,13 @@ public:
 	virtual double avalia();
 };
 
-template <class type>
 class evolutivo{
 private:
-	std::vector<type> ind;
+	std::vector<individuo> ind;
 	std::vector<double> notas;
 public:
 	evolutivo(){}; //presente por motivos de debug
-	evolutivo(std::vector<type>);
+	evolutivo(std::vector<individuo>);
 	~evolutivo();
 	void itera(int = 1); //faz n iteracoes
 	double get_best();
