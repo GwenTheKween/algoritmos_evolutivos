@@ -1,24 +1,27 @@
 #include <iostream>
 #include <vector>
 
-class individuo{
+template<class type> class individuo{
+protected:
+	std::vector<type> genes;
 public:
 	//expandir as transas para os multiplos jeitos possiveis
-	virtual individuo transa(individuo); //transa com uma pessoa soh
-	virtual individuo transa(std::vector<individuo>); //suruba com n pessoas
+	virtual void transa(individuo*) = 0; //transa com uma pessoa soh
+	virtual void transa(std::vector<individuo>) = 0; //suruba com n pessoas
 	//range da mutacao e probabilidade que um gene sofra mutacao. se <=0, 1 gene eh escolhido aleatoriamente
-	virtual void mutacao(int, int = 0);
-	virtual double avalia();
+	virtual void mutacao(int, int = 0) = 0;
+	virtual double avalia() = 0;
+	std::vector<type> get_genes(){return genes;};
 };
 
-class evolutivo{
+template<class type> class evolutivo{
 private:
-	std::vector<individuo> ind;
+	std::vector<individuo<type> > ind;
 	std::vector<double> notas;
 public:
 	evolutivo(){}; //presente por motivos de debug
-	evolutivo(std::vector<individuo>);
-	~evolutivo();
+	evolutivo(std::vector<individuo<type> >);
+	~evolutivo(){};
 	void itera(int = 1); //faz n iteracoes
 	double get_best();
 };

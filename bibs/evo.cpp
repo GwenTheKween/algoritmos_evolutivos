@@ -1,6 +1,6 @@
 #include "evo.h"
 
-evolutivo::evolutivo(std::vector<individuo> v):
+template<class type> evolutivo<type>::evolutivo(std::vector<individuo> v):
 	ind(v), //inicializa o vetor de individuos com os individuos passados
 	notas(v.size(),0) //inicializa um vetor com v.size() zeros
 	{
@@ -10,7 +10,7 @@ evolutivo::evolutivo(std::vector<individuo> v):
 	}
 }
 
-double evolutivo::get_best(){
+template<class type>double evolutivo<type>::get_best(){
 	double best=notas[0];
 	for(int i=1;i<notas.size();i++){
 		if(best<notas[i]) best=notas[i];
@@ -18,7 +18,7 @@ double evolutivo::get_best(){
 	return best;
 }
 
-void evolutivo::itera(int n){
+template<class type>void evolutivo<type>::itera(int n){
 	/*comeca apenas com elitismo*/
 	int best;
 	for(int gen=0;gen<n;gen++){
