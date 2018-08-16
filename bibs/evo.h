@@ -1,10 +1,7 @@
 #include <iostream>
 #include <vector>
 
-template <class type>
 class individuo{
-protected:
-	std::vector<type> genes;
 public:
 	//expandir as transas para os multiplos jeitos possiveis
 	virtual individuo transa(individuo); //transa com uma pessoa soh
