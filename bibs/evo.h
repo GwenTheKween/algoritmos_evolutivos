@@ -1,3 +1,5 @@
+#ifndef EVOLUTIVO
+#define EVOLUTIVO
 #include <iostream>
 #include <vector>
 
@@ -12,7 +14,7 @@ public:
 		return filho;
 	}
 	void mutacao(int amnt =0, int prob = 0){
-		gene+=((double)(rand()%300))/100 - 1;
+		gene+=((double)(rand()%200))/100 - 1;
 	}
 	double avalia(){
 		return gene*(100-gene);
@@ -22,6 +24,9 @@ public:
 	}
 	void debug(){
 		std::cout<<gene<<std::endl;
+	}
+	double get_gene(){
+		return gene;
 	}
 };
 
@@ -34,5 +39,7 @@ public:
 	evolutivo(std::vector<type>);
 	~evolutivo(){};
 	void itera(int = 1); //faz n iteracoes
-	double get_best();
+	type get_best();
 };
+
+#endif

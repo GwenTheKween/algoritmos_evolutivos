@@ -5,7 +5,7 @@ int main(){
 	std::vector<numero> init;
 	numero n;
 	for(int i=0;i<5;i++){
-		n.set(rand()%200);
+		n.set(rand()%200 - 50); //vai de -50 a 150, com o maximo sendo exatamente no meio
 		n.debug();
 		init.push_back(n);
 	}

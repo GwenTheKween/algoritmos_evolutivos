@@ -10,25 +10,34 @@ template<class type> evolutivo<type>::evolutivo(std::vector<type> v):
 	}
 }
 
-template<class type>double evolutivo<type>::get_best(){
-	double best=notas[0];
+template<class type>type evolutivo<type>::get_best(){
+	double best=0;
 	for(int i=1;i<notas.size();i++){
-		if(best<notas[i]) best=notas[i];
+		if(notas[best]<notas[i]) best=i;
 	}
-	return best;
+	return individuo[best];
 }
 
 template<class type>void evolutivo<type>::itera(int n){
 	/*comeca apenas com elitismo*/
 	int best;
 	for(int gen=0;gen<n;gen++){
+		printf("geracao: %d\n",gen);
+		//calcula qual eh o melhor individuo
 		best=0;
 		for(int i=1;i<notas.size();i++){
 			if(notas[best]<notas[i]) best=i;
 		}
+		//faz ele transar com todo mundo e avalia os filhos
 		for(int i=0;i<individuo.size();i++){
-			individuo[i].transa(individuo[best]);
-			notas[i]=individuo[i].avalia();
+			if(i!=best){
+				individuo[i]=individuo[i].transa(individuo[best]);
+				notas[i]=individuo[i].avalia();
+			}
+			printf("individuo %d:  (%lf,%lf)\n",i,individuo[i].get_gene(),notas[i]);
 		}
+		printf("\n\n");
 	}
 }
+
+template class evolutivo<numero>;
