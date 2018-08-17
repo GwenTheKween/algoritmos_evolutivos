@@ -4,6 +4,12 @@
 #include <vector>
 #include "numero.h"
 
+enum tipos_de_transa{
+	ELITISMO,
+	CASINHAS,
+	TORNEIO,
+};
+
 template<class type> class evolutivo{
 private:
 	std::vector<type> individuo;
@@ -12,8 +18,10 @@ public:
 	evolutivo(){}; //presente por motivos de debug
 	evolutivo(std::vector<type>);
 	~evolutivo(){};
-	void itera(int = 1); //faz n iteracoes
+	void itera(int = 1,int = ELITISMO); //faz n iteracoes
 	type get_best();
+	std::vector<type> get_all_individuo(){return individuo;};
+	std::vector<type> transa_por_elitismo();
 };
 
 template<class type> evolutivo<type>::evolutivo(std::vector<type> v):
@@ -34,27 +42,32 @@ template<class type>type evolutivo<type>::get_best(){
 	return individuo[best];
 }
 
-template<class type>void evolutivo<type>::itera(int n){
+template<class type>void evolutivo<type>::itera(int n,int tipo_transa){
 	/*comeca apenas com elitismo*/
-	int best;
 	for(int gen=0;gen<n;gen++){
-		printf("geracao: %d\n",gen);
-		//calcula qual eh o melhor individuo
-		best=0;
-		for(int i=1;i<notas.size();i++){
-			if(notas[best]<notas[i]) best=i;
-		}
-		//faz ele transar com todo mundo e avalia os filhos
-		for(int i=0;i<individuo.size();i++){
-			if(i!=best){
-				individuo[i]=individuo[i].transa(individuo[best]);
-				notas[i]=individuo[i].avalia();
-			}
-			printf("individuo %d:  (%lf,%lf)\n",i,individuo[i].get_gene(),notas[i]);
-		}
-		printf("\n\n");
+		if(tipo_transa==ELITISMO)
+			individuo=transa_por_elitismo();
+		for(int i=0;i<individuo.size();i++)
+			notas[i]=individuo[i].avalia();
 	}
 }
 
+template<class type> std::vector<type> evolutivo<type>::transa_por_elitismo(){
+	//calcula qual eh o melhor individuo
+	int best=0;
+	std::vector<numero> nova_geracao;
+	for(int i=1;i<notas.size();i++){
+		if(notas[best]<notas[i]) best=i;
+	}
+	//faz ele transar com todo mundo e avalia os filhos
+	for(int i=0;i<individuo.size();i++){
+		if(i!=best){
+			nova_geracao.push_back(individuo[i].transa(individuo[best]));
+		}else{
+			nova_geracao.push_back(individuo[i]);
+		}
+	}
+	return nova_geracao;
+}
 
 #endif
