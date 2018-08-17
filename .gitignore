@@ -3,6 +3,8 @@
 /hard_coded/elitismo.png
 /hard_coded/torneio.png
 /hard_coded/tretoso.png
+/bibs/*.swp
+/*.swp
 /a.out
 /bibs/evo.o
 /test
