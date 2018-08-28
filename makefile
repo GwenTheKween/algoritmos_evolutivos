@@ -4,6 +4,7 @@ LINKFLAGS = -o
 NOME = test
 CFILES = teste.cpp
 BIBS = $(wildcard bibs/*.h)
+DATA_FILE = dados
 
 all: test
 
@@ -11,7 +12,7 @@ test: $(CFILES) $(BIBS)
 	$(COMP) $(CFILES) $(COMPFLAGS) $(LINKFLAGS) $(NOME)
 
 run: test
-	./$(NOME)
+	./$(NOME) > $(DATA_FILE) 
 
 clear:
 	rm $(OFILES) $(NOME)

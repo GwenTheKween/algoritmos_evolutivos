@@ -15,10 +15,10 @@ def transa(pai,mae):
 	    return mae
     filho=(pai+mae)/2
     diff=np.abs(pai-mae)
-    return filho + 2*(random() - 0.5)
+    return filho + 4*(random() - 1)
 
 def avalia(x):
-    return x*(x-200)*np.sin(x)
+    return x*(x-200)*np.sin(0.2*x)
 
 def ajeita_plot(ind,notas):
     y=[0,notas[0]]
@@ -35,14 +35,18 @@ def ajeita_plot(ind,notas):
 ind=[] #individuos
 notas=[]
 TamPop=8 #tamanho da populacao
-qtde_geracoes=200 #quantidade de iteracoes
+qtde_geracoes=20 #quantidade de iteracoes
 grafico_ind=[[] for i in range(TamPop)]
 grafico_notas=[[] for i in range(TamPop)]
+grafico_media=[]
+grafico_melhor=[]
 
 #inicia as populacoes
 for i in range(TamPop):
     ind.append(gera_individuo())
-
+c=''
+#flag=True
+flag=False
 #iteracoes do algoritmo
 for j in range(qtde_geracoes):
     #avalia a viabilidade
@@ -53,15 +57,53 @@ for j in range(qtde_geracoes):
         grafico_ind[i].append(ind[i])
         grafico_notas[i].append(notas[i])
 
+    grafico_media.append(sum(notas)/TamPop)
     #escolhe o individuo mais viavel
     mx=0
     for i in range(1,TamPop):
         if(notas[i]>notas[mx]):
             mx=i
+    grafico_melhor.append(notas[mx])
     #gera os novos individuos, matando todos os antigos
     ind=[transa(ind[i],ind[mx]) for i in range(TamPop)]
+    if(flag):
+    	#processamento para plotar os graficos
+        t=np.linspace(0,200,1000)
+        Y=avalia(t)
+
+
+        plt.subplot(221)
+        plt.plot(t,Y,'k')
+        x,y=ajeita_plot(grafico_ind[0],grafico_notas[0])
+        for i in range(qtde_geracoes):
+            plt.plot(x,y,'b--')
+
+        plt.subplot(222)
+        plt.plot(t,Y,'k')
+        x,y=ajeita_plot(grafico_ind[1],grafico_notas[1])
+        for i in range(qtde_geracoes):
+            plt.plot(x,y,'b--')
+        plt.subplot(223)
+        plt.plot(t,Y,'k')
+        x,y=ajeita_plot(grafico_ind[2],grafico_notas[2])
+        for i in range(qtde_geracoes):
+            plt.plot(x,y,'b--')
+
+        plt.subplot(224)
+        plt.plot(t,Y,'k')
+        x,y=ajeita_plot(grafico_ind[3],grafico_notas[3])
+        for i in range(qtde_geracoes):
+            plt.plot(x,y,'b--')
+
+        plt.show()
+        c=input()
+        if(c=='q'):
+            flag=False
 
 print(ind[mx],avalia(ind[mx]))
+
+grafico_media.append(sum(notas)/TamPop)
+grafico_melhor.append(max(notas))
 
 #termina os dados do grafico
 for i in range(TamPop):
@@ -104,6 +146,11 @@ t=[i for i in range(qtde_geracoes+1)]
 for individuo in grafico_ind:
     plt.plot(t,individuo,'--')
 
-plt.savefig('tretoso')
+#plt.savefig('seno')
 
+plt.show()
+
+plt.subplot(111)
+plt.plot(t,grafico_media,'b',label='media')
+plt.plot(t,grafico_melhor,'r',label='melhor')
 plt.show()
