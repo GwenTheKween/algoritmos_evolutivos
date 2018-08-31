@@ -30,6 +30,7 @@ public:
 	void itera(int = 1,bool = false); //faz n iteracoes
 	std::vector<type> transa_por_elitismo();
 	std::vector<type> transa_por_roleta();
+	std::vector<type> transa_por_torneio(int = 2);//torneio com n individuos
 };
 
 template<class type> evolutivo<type>::evolutivo(std::vector<type> v,int tipo_transa):
@@ -65,6 +66,8 @@ template<class type>void evolutivo<type>::itera(int n,bool verbose){
 			individuo=transa_por_elitismo();
 		else if(tipo==ROLETA)
 			individuo=transa_por_roleta();
+		else if(tipo==TORNEIO)
+			individuo=transa_por_torneio();
 		for(int i=0;i<individuo.size();i++)
 			notas[i]=individuo[i].avalia();
 	}
@@ -90,8 +93,9 @@ template<class type> std::vector<type> evolutivo<type>::transa_por_elitismo(){
 
 template<class type> std::vector<type> evolutivo<type>::transa_por_roleta(){
 	//calcula a soma das notas, para agir como valor maximo do range
-	double sum=0;
-	for(int i=0;i<notas.size();i++) sum+=notas[i];
+	//negs indica quanto a resposta tem que ser shiftada para abaixo de 0
+	double sum=0,negs=0;
+	for(int i=0;i<notas.size();i++) sum+=(notas[i]>0)?notas[i]:-notas[i];
 	//gera dois numeros aleatorios, uniformemente distribuido, entre [0,sum)
 	double pai=rand(), mae=rand();
 	pai/=RAND_MAX;
@@ -115,6 +119,38 @@ template<class type> std::vector<type> evolutivo<type>::transa_por_roleta(){
 	std::cout<<j<<'\n';
 	exit(0);
 	return individuo;
+}
+
+template<class type> std::vector<type> evolutivo<type>::transa_por_torneio(int n){
+	std::vector<type> nova_geracao;
+	int pai,mae,challenger,best=0;
+	//encontra o melhor de todos, para nao matar ele sem querer
+	for(int k=0;k<notas.size();k++){
+		if(notas[k]>notas[best]){
+			best=k;
+		}
+	}
+	for(int k=0;k<individuo.size();k++){
+		if(k==best){
+			nova_geracao.push_back(individuo[k]); //melhor de todos simplesmente passa para proxima geracao
+			continue;
+		}
+		//do contrario:
+		//determina quem vai ser o pai
+		pai=rand()%individuo.size();
+		for(int i=0;i<n-1;i++){
+			challenger=rand()%individuo.size();
+			if(notas[challenger]>notas[pai]) pai=challenger;
+		}
+		//determina quem vai ser a mae
+		mae=rand()%individuo.size();
+		for(int i=0;i<n-1;i++){
+			challenger=rand()%individuo.size();
+			if(notas[challenger]>notas[mae])mae=challenger;
+		}
+		nova_geracao.push_back(individuo[pai].transa(individuo[mae]));
+	}
+	return nova_geracao;
 }
 
 #endif

@@ -1,6 +1,6 @@
 #primeira tentativa de algritmo genetico
-#usando o metodo do elitismo
-#apelidado de "o melhor transa com todos"
+#usando o metodo da roleta (ou das casinhas)
+#a chance de um individuo transar eh diretamente proporcional a nota
 
 import matplotlib.pyplot as plt
 import numpy as np
