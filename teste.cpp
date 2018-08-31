@@ -7,7 +7,7 @@ int main(int argc, char** argv){
 	if(argc<2){
 		verbose=false;
 	}else{
-		if(argv[0]=='-' && (argv[1]=='v' || argv[1]=='V')){
+		if(argv[1][0]=='-' && (argv[1][1]=='v' || argv[1][1]=='V')){
 			verbose=true;
 		}else{
 			verbose=false;
