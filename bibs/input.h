@@ -51,13 +51,14 @@ void proc_argv(int argc,char** argv,int* proc){
 }
 
 void print_help(char** argv){
-	printf("USAGE: %s -t <type> [<options>]",argv[0]);
+	printf("USAGE: %s -t <type> [<options>]\n",argv[0]);
 	printf("\t-t:\t\t type of cross-over used for the algorithm, there are 3 possible types:\n");
 	printf("\t\telitismo(e): the best performing is used to cross-over with all others\n");
 	printf("\t\troleta(r): Original proposed method, 2 individuals are chosen at random, with the best performing being more likely\n");
 	printf("\t\ttorneio(t): chooses 2 sets of n individuals (default is 2) at random, and the best performing of each set is chosen for the cross-over\n");
 	printf("\nADDITIONAL OPTIONS:\n");
 	printf("\t-v: verbose\n");
+	printf("\t-h: show this page\n");
 	printf("\n\nPS: roleta is not fully implemented yet\n");
 }
 

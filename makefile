@@ -12,7 +12,9 @@ test: $(CFILES) $(BIBS)
 	$(COMP) $(CFILES) $(COMPFLAGS) $(LINKFLAGS) $(NOME)
 
 run: test
-	./$(NOME) > $(DATA_FILE) 
+	./$(NOME) -t e -v > $(DATA_FILE)e
+	./$(NOME) -t t -v > $(DATA_FILE)t
+	./plot.py 0-2 $(DATA_FILE)e $(DATA_FILE)t
 
 clear:
 	rm $(OFILES) $(NOME)
