@@ -2,6 +2,7 @@
 
 #define NUMERO
 #include <iostream>
+#include <math.h>
 
 class numero{
 private:
