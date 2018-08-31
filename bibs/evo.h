@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 enum tipos_de_transa{
-	ELITISMO,
+	ELITISMO = 1,
 	ROLETA,
 	TORNEIO,
 };
