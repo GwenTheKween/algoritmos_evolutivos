@@ -15,7 +15,6 @@ def plot(column,files):
 				i=i[1:]
 				for j in range(len(i)):
 					y[j].append(i[j])
-			print(x,y,sep='\n')
 			for i in y:
 				plt.plot(x,i)
 			plt.savefig(f_name+"_grafico.png")
