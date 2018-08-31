@@ -18,7 +18,7 @@ private:
 public:
 	//funcoes para inicializacao
 	evolutivo(){}; //presente por motivos de debug
-	evolutivo(std::vector<type>,int = 1);
+	evolutivo(std::vector<type>,int = ELITISMO);
 	~evolutivo(){};
 
 	//funcoes para pegar parametros
@@ -52,7 +52,6 @@ template<class type>type evolutivo<type>::get_best(){
 }
 
 template<class type>void evolutivo<type>::itera(int n,bool verbose){
-	/*comeca apenas com elitismo*/
 	for(int gen=0;gen<n;gen++){
 		if(verbose){
 			double mx=notas[0],sum=notas[0];
