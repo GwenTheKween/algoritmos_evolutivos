@@ -6,6 +6,8 @@ enum ARGV{
 	VERBOSE, 
 	TIPO_TRANSA,	//tipo de transa a ser usado
 	HELP,
+    GEN_AMNT,
+    MUT_RANGE,
 	SIZE_ARGV
 };
 
@@ -22,7 +24,12 @@ std::string lower_all(char* s){
 
 void proc_argv(int argc,char** argv,int* proc){
 	std::string s,tmp;
-	for(int i=0;i<SIZE_ARGV;i++) proc[i]=0;
+    //load standard values
+	for(int i=0;i<SIZE_ARGV;i++){
+        if(i==GEN_AMNT) proc[i]=20;
+        else if(i==MUT_RANGE) proc[i]=100;
+        else proc[i]=0;
+    }
 	if(argc<2){
 		proc[HELP]=1;
 	}else{
@@ -44,7 +51,17 @@ void proc_argv(int argc,char** argv,int* proc){
 						proc[TIPO_TRANSA]=TORNEIO;
 					}
 				}
-			}
+			}else if(s=="-n"){
+                i++;
+                if(i<argc){
+                    proc[GEN_AMNT]=atoi(argv[i]);
+                }
+            }else if(s=="-m"){
+                i++;
+                if(i<argc){
+                    proc[MUT_RANGE]=atoi(argv[i]);
+                }
+            }
 		}
 	}
 	if(proc[TIPO_TRANSA]==0) proc[HELP]=1;
@@ -59,6 +76,8 @@ void print_help(char** argv){
 	printf("\nADDITIONAL OPTIONS:\n");
 	printf("\t-v: verbose\n");
 	printf("\t-h: show this page\n");
+    printf("\t-n <num>: number of generations\n");
+    printf("\t-m <num>: range of motation times 100\n");
 	printf("\n\nPS: roleta is not fully implemented yet\n");
 }
 

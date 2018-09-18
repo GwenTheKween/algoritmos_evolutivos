@@ -15,10 +15,11 @@ private:
 	std::vector<type> individuo;
 	std::vector<double> notas;
 	int tipo;
+    double range;
 public:
 	//funcoes para inicializacao
 	evolutivo(){}; //presente por motivos de debug
-	evolutivo(std::vector<type>,int = ELITISMO);
+	evolutivo(std::vector<type>,int = ELITISMO,int = 100);
 	~evolutivo(){};
 
 	//funcoes para pegar parametros
@@ -33,10 +34,11 @@ public:
 	std::vector<type> transa_por_torneio(int = 2);//torneio com n individuos
 };
 
-template<class type> evolutivo<type>::evolutivo(std::vector<type> v,int tipo_transa):
+template<class type> evolutivo<type>::evolutivo(std::vector<type> v,int tipo_transa, int mut_rng):
 	individuo(v), //inicializa o vetor de individuos com os individuos passados
 	notas(v.size(),0), //inicializa um vetor com v.size() zeros
-	tipo(tipo_transa)
+	tipo(tipo_transa),
+    range(mut_rng/100)
 	{
 	int i;
 	for(i=0;i<v.size();i++){
@@ -83,7 +85,7 @@ template<class type> std::vector<type> evolutivo<type>::transa_por_elitismo(){
 	//faz ele transar com todo mundo e avalia os filhos
 	for(int i=0;i<individuo.size();i++){
 		if(i!=best){
-			nova_geracao.push_back(individuo[i].transa(individuo[best]));
+			nova_geracao.push_back(individuo[i].transa(individuo[best],range));
 		}else{
 			nova_geracao.push_back(individuo[i]);
 		}
@@ -148,7 +150,7 @@ template<class type> std::vector<type> evolutivo<type>::transa_por_torneio(int n
 			challenger=rand()%individuo.size();
 			if(notas[challenger]>notas[mae])mae=challenger;
 		}
-		nova_geracao.push_back(individuo[pai].transa(individuo[mae]));
+		nova_geracao.push_back(individuo[pai].transa(individuo[mae],range));
 	}
 	return nova_geracao;
 }

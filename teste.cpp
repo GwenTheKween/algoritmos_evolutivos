@@ -10,11 +10,11 @@ int main(int argc, char** argv){
 		print_help(argv);
 	}else{
 		for(int i=0;i<5;i++){
-			n.set(rand()%2000 - 500); //vai de -50 a 150, com o maximo sendo exatamente no meio
+			n.set(rand()%200 - 100); //vai de -50 a 150, com o maximo sendo exatamente no meio
 			init.push_back(n);
 		}
 		evolutivo<numero> e(init,processed[TIPO_TRANSA]);
-		e.itera(20,processed[VERBOSE]);
+		e.itera(processed[GEN_AMNT],processed[VERBOSE]);
 		n=e.get_best();
 	}
 	return 0;
