@@ -12,8 +12,8 @@ test: $(CFILES) $(BIBS)
 	$(COMP) $(CFILES) $(COMPFLAGS) $(LINKFLAGS) $(NOME)
 
 run: test
-	./$(NOME) -t e -v -n 200 -m 100 > $(DATA_FILE)e
-	./$(NOME) -t t -v -n 200 -m 100 > $(DATA_FILE)t
+	./$(NOME) -t e -s -v -n 200 -m 100 > $(DATA_FILE)e
+	./$(NOME) -t t -s -v -n 200 -m 100 > $(DATA_FILE)t
 	./plot.py 0-2 $(DATA_FILE)e $(DATA_FILE)t
 
 clear:

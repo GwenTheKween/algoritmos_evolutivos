@@ -10,16 +10,22 @@ enum tipos_de_transa{
 	TORNEIO,
 };
 
+enum condicoes_de_parada{
+    FIXED=1,
+    STABLE
+};
+
 template<class type> class evolutivo{
 private:
 	std::vector<type> individuo;
 	std::vector<double> notas;
 	int tipo;
     double range;
+    int end_cond,stable_count;
 public:
 	//funcoes para inicializacao
 	evolutivo(){}; //presente por motivos de debug
-	evolutivo(std::vector<type>,int = ELITISMO,int = 100);
+	evolutivo(std::vector<type>,int = ELITISMO,int = FIXED,int = 100);
 	~evolutivo(){};
 
 	//funcoes para pegar parametros
@@ -34,11 +40,13 @@ public:
 	std::vector<type> transa_por_torneio(int = 2);//torneio com n individuos
 };
 
-template<class type> evolutivo<type>::evolutivo(std::vector<type> v,int tipo_transa, int mut_rng):
+template<class type> evolutivo<type>::evolutivo(std::vector<type> v,int tipo_transa,int cond_end, int mut_rng):
 	individuo(v), //inicializa o vetor de individuos com os individuos passados
 	notas(v.size(),0), //inicializa um vetor com v.size() zeros
 	tipo(tipo_transa),
-    range(mut_rng/100)
+    range(mut_rng/100),
+    end_cond(cond_end),
+    stable_count(0)
 	{
 	int i;
 	for(i=0;i<v.size();i++){
@@ -55,13 +63,14 @@ template<class type>type evolutivo<type>::get_best(){
 }
 
 template<class type>void evolutivo<type>::itera(int n,bool verbose){
-	for(int gen=0;gen<n;gen++){
+    int gen=0;
+	while((gen<n && end_cond==FIXED) || (stable_count<n && end_cond==STABLE)){
+        double mx=notas[0],sum=notas[0],new_mx;
+        for(int i=1;i<notas.size();i++){
+            if(mx<notas[i])mx=notas[i];
+            sum+=notas[i];
+        }
 		if(verbose){
-			double mx=notas[0],sum=notas[0];
-			for(int i=1;i<notas.size();i++){
-				if(mx<notas[i])mx=notas[i];
-				sum+=notas[i];
-			}
 			std::cout<<gen<<'\t'<<mx<<'\t'<<sum/notas.size()<<'\n';
 		}
 		if(tipo==ELITISMO)
@@ -70,8 +79,18 @@ template<class type>void evolutivo<type>::itera(int n,bool verbose){
 			individuo=transa_por_roleta();
 		else if(tipo==TORNEIO)
 			individuo=transa_por_torneio();
-		for(int i=0;i<individuo.size();i++)
+        notas[0]=individuo[0].avalia();
+        new_mx=notas[0];
+		for(int i=1;i<individuo.size();i++){
 			notas[i]=individuo[i].avalia();
+            if(new_mx<notas[i]) new_mx=notas[i];
+        }
+        if(new_mx == mx){
+            stable_count++;
+        }else{
+            stable_count=0;
+        }
+        gen++;
 	}
 }
 

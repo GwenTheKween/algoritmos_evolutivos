@@ -5,6 +5,7 @@
 enum ARGV{
 	VERBOSE, 
 	TIPO_TRANSA,	//tipo de transa a ser usado
+    COND_FIM,
 	HELP,
     GEN_AMNT,
     MUT_RANGE,
@@ -61,22 +62,27 @@ void proc_argv(int argc,char** argv,int* proc){
                 if(i<argc){
                     proc[MUT_RANGE]=atoi(argv[i]);
                 }
+            }else if(s=="-f"){
+                proc[COND_FIM]=FIXED;
+            }else if(s=="-s"){
+                proc[COND_FIM]=STABLE;
             }
 		}
 	}
-	if(proc[TIPO_TRANSA]==0) proc[HELP]=1;
+	if((proc[TIPO_TRANSA]*proc[COND_FIM])==0) proc[HELP]=1;
 }
 
 void print_help(char** argv){
-	printf("USAGE: %s -t <type> [<options>]\n",argv[0]);
+	printf("USAGE: %s -t <type> <endCondition> [<options>]\n",argv[0]);
 	printf("\t-t:\t\t type of cross-over used for the algorithm, there are 3 possible types:\n");
 	printf("\t\telitismo(e): the best performing is used to cross-over with all others\n");
 	printf("\t\troleta(r): Original proposed method, 2 individuals are chosen at random, with the best performing being more likely\n");
 	printf("\t\ttorneio(t): chooses 2 sets of n individuals (default is 2) at random, and the best performing of each set is chosen for the cross-over\n");
+    printf("\tEndCondition: -f/-s either -f for fixed amount of generations, or -s for stability condition\n");
 	printf("\nADDITIONAL OPTIONS:\n");
 	printf("\t-v: verbose\n");
 	printf("\t-h: show this page\n");
-    printf("\t-n <num>: number of generations\n");
+    printf("\t-n <num>: number of generations to be simulated, if -f is chosen, or maximum number of stable generations, if -s is chosen\n");
     printf("\t-m <num>: range of motation times 100\n");
 	printf("\n\nPS: roleta is not fully implemented yet\n");
 }

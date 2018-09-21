@@ -20,13 +20,13 @@ public:
 		gene+=mut/100 - range/200;
 	}
 	double avalia(){
-		return gene*(100-gene)+100*sin(gene);
+		return gene*(1000-gene)+1000*sin(0.75*gene);
 	}
 	void set(double x){
 		gene=x;
 	}
-	void debug(){
-		std::cout<<gene<<std::endl;
+	void debug(char c='\n'){
+		std::cout<<gene<<c;
 	}
 	double get_gene(){
 		return gene;
