@@ -1,6 +1,8 @@
 #include "grafo.h"
 
 //=====================================================================================================================================================
+//Internal functions used only for map generation
+
 //Random DFS to generate a tree as the map. This is only the first step of the map generation
 void DFS(char **mat,coord pos,int h, int w){
     std::vector<int> unv;
@@ -56,6 +58,37 @@ void DFS(char **mat,coord pos,int h, int w){
     }
 }
 
+//Chooses a few random positions to turn into loops
+void generate_loops(char **mat, int h, int w,int n=5){ //n indicates how many new connections should be generated
+    coord pos;
+    std::vector<int> dirs;
+    int new_dir;
+    for(int i=0;i<n;i++){
+        pos.x=rand()%h;
+        pos.y=rand()%w;
+
+        //directions that have no connection and represent a possible movement
+        if(!(mat[pos.x][pos.y]&UP)      && pos.x > 0)dirs.push_back(UP);
+        if(!(mat[pos.x][pos.y]&DOWN)    && pos.x+1 < h)dirs.push_back(DOWN);
+        if(!(mat[pos.x][pos.y]&LEFT)    && pos.y > 0)dirs.push_back(LEFT);
+        if(!(mat[pos.x][pos.y]&RIGHT)   && pos.y+1 < w)dirs.push_back(RIGHT);
+
+        //chooses a new direction to connect
+        new_dir=rand()%dirs.size();
+        new_dir=dirs[new_dir];
+        printf("(%d,%d): %d\n",pos.x,pos.y,new_dir);
+        mat[pos.x][pos.y]^=new_dir; //adds the direction
+
+        //adds the possibility to move back
+        if(new_dir==UP)     mat[pos.x-1][pos.y]^=DOWN;
+        else if(new_dir==DOWN)   mat[pos.x+1][pos.y]^=UP;
+        else if(new_dir==LEFT)   mat[pos.x][pos.y-1]^=RIGHT;
+        else if(new_dir==RIGHT)  mat[pos.x][pos.y+1]^=LEFT;
+
+        dirs.clear();
+    }
+}
+
 //=====================================================================================================================================================
 grafo::grafo(int w, int h):
     width(w),
@@ -86,14 +119,28 @@ void grafo::gen_map(char** model){
         coord pos;
         pos.x=rand()%height;
         pos.y=rand()%width;
-        //DFS<this->height, this-> width>(&map,pos);
         DFS(map,pos,height, width);
-        //Generate_loops(&map,height,width);
+        draw();
+        generate_loops(map,height,width);
     }
 }
 
 void grafo::draw(){
-    //so far does nothing, but at some point will print the map using ncurses
+    //prints the map using a 3x3 space, very ugly, just for debug sake
+    for(int i=0;i<height;i++){
+        for(int j=0;j<width;j++){
+            printf("|%c|",(map[i][j]&UP)?' ':'-');
+        }
+        printf("\n");
+        for(int j=0;j<width;j++){
+            printf("%c %c",(map[i][j]&LEFT)?' ':'|',(map[i][j]&RIGHT)?' ':'|');
+        }
+        printf("|\n");
+        for(int j=0;j<width;j++){
+            printf("|%c|",(map[i][j]&DOWN)?' ':'-');
+        }
+        printf("\n");
+    }
     return;
 }
 
