@@ -6,7 +6,7 @@ void DFS(char*** mat,coord pos,int h,int w){
     std::vector<int> unv;
     std::stack<coord> path;
     int dir;
-    path.push(coord);
+    path.push(pos);
     //while there's still a path to follow
     while(!path.empty()){
         //takes the last position of the path
