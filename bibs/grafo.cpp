@@ -2,7 +2,7 @@
 
 //=====================================================================================================================================================
 //Random DFS to generate a tree as the map. This is only the first step of the map generation
-void DFS(char*** mat,coord pos,int h,int w){
+void DFS(char **mat,coord pos,int h, int w){
     std::vector<int> unv;
     std::stack<coord> path;
     int dir;
@@ -13,16 +13,16 @@ void DFS(char*** mat,coord pos,int h,int w){
         pos=path.top();
 
         //check which of the neighbours are not visited by 
-        if(pos.x > 0 && ((*mat)[pos.x-1][pos.y]==0)){
+        if(pos.x > 0 && (mat[pos.x-1][pos.y]==0)){
             unv.push_back(UP);
         }
-        if(pos.x+1 < h && ((*mat)[pos.x+1][pos.y]==0)){
+        if(pos.x+1 < h && (mat[pos.x+1][pos.y]==0)){
             unv.push_back(DOWN);
         }
-        if(pos.y > 0 && ((*mat)[pos.x][pos.y-1]==0)){
+        if(pos.y > 0 && (mat[pos.x][pos.y-1]==0)){
             unv.push_back(LEFT);
         }
-        if(pos.y+1 < w && ((*mat)[pos.x][pos.y+1]==0)){
+        if(pos.y+1 < w && (mat[pos.x][pos.y+1]==0)){
             unv.push_back(RIGHT);
         }
 
@@ -31,22 +31,22 @@ void DFS(char*** mat,coord pos,int h,int w){
             dir=rand()%unv.size();
             dir=unv[dir];
             //the direction is added by xor-ing the position and the direction, because each position is a bitmap of the possible directions
-            (*mat)[pos.x][pos.y]^=dir;
+            mat[pos.x][pos.y]^=dir;
             if(dir==UP){
                 pos.x--;
-                (*mat)[pos.x][pos.y]=DOWN;
+                mat[pos.x][pos.y]=DOWN;
                 path.push(pos);
             }else if(dir==DOWN){
                 pos.x++;
-                (*mat)[pos.x][pos.y]=UP;
+                mat[pos.x][pos.y]=UP;
                 path.push(pos);
             }else if(dir==LEFT){
                 pos.y--;
-                (*mat)[pos.x][pos.y]=RIGHT;
+                mat[pos.x][pos.y]=RIGHT;
                 path.push(pos);
             }else{
                 pos.y++;
-                (*mat)[pos.x][pos.y]=LEFT;
+                mat[pos.x][pos.y]=LEFT;
                 path.push(pos);
             }
         }else //if no more paths can be followed from the current position, backtracks to the last position;
@@ -86,7 +86,8 @@ void grafo::gen_map(char** model){
         coord pos;
         pos.x=rand()%height;
         pos.y=rand()%width;
-        DFS(&map,pos,height,width);
+        //DFS<this->height, this-> width>(&map,pos);
+        DFS(map,pos,height, width);
         //Generate_loops(&map,height,width);
     }
 }
