@@ -1,10 +1,18 @@
 #include "grafo.h"
 
 //=====================================================================================================================================================
+//Random DFS to generate a tree as the map. This is only the first step of the map generation
 void DFS(char*** mat,coord pos,int h,int w){
     std::vector<int> unv;
+    std::stack<coord> path;
     int dir;
-    while(1){
+    path.push(coord);
+    //while there's still a path to follow
+    while(!path.empty()){
+        //takes the last position of the path
+        pos=path.top();
+
+        //check which of the neighbours are not visited by 
         if(pos.x > 0 && ((*mat)[pos.x-1][pos.y]==0)){
             unv.push_back(UP);
         }
@@ -17,32 +25,33 @@ void DFS(char*** mat,coord pos,int h,int w){
         if(pos.y+1 < w && ((*mat)[pos.x][pos.y+1]==0)){
             unv.push_back(RIGHT);
         }
+
+        //if there are unvisited neighbours, choose one randomly and adds them as the last position of the path
         if(unv.size()>0){
             dir=rand()%unv.size();
             dir=unv[dir];
+            //the direction is added by xor-ing the position and the direction, because each position is a bitmap of the possible directions
             (*mat)[pos.x][pos.y]^=dir;
             if(dir==UP){
                 pos.x--;
                 (*mat)[pos.x][pos.y]=DOWN;
-                DFS(mat,pos,h,w);
-                pos.x++;
+                path.push(pos);
             }else if(dir==DOWN){
                 pos.x++;
                 (*mat)[pos.x][pos.y]=UP;
-                DFS(mat,pos,h,w);
-                pos.x--;
+                path.push(pos);
             }else if(dir==LEFT){
                 pos.y--;
                 (*mat)[pos.x][pos.y]=RIGHT;
-                DFS(mat,pos,h,w);
-                pos.y++;
+                path.push(pos);
             }else{
                 pos.y++;
                 (*mat)[pos.x][pos.y]=LEFT;
-                DFS(mat,pos,h,w);
-                pos.y--;
+                path.push(pos);
             }
-        }else break;
+        }else //if no more paths can be followed from the current position, backtracks to the last position;
+            path.pop();
+        //clears the unvisited neighbours vector
         unv.clear();
     }
 }
@@ -50,7 +59,7 @@ void DFS(char*** mat,coord pos,int h,int w){
 //=====================================================================================================================================================
 grafo::grafo(int w, int h):
     width(w),
-    height((h>0)?h:w)
+    height((h>0)?h:w)//if a desired height was given, use that, otherwise makes a square matrix
     {
     map=new char*[height];
     map[0]=new char[width*height];
@@ -65,6 +74,7 @@ grafo::~grafo(){
 }
 
 void grafo::gen_map(char** model){
+    //if a model map was passed, copies it into the graph
     if(model){
         int i,j;
         for(i=0;i<height;i++){
@@ -72,18 +82,21 @@ void grafo::gen_map(char** model){
                 map[i][j]=model[i][j];
             }
         }
-    }else{
+    }else{ //otherwise chooses randomly a start position and generates a map
         coord pos;
-        pos.x=pos.y=0;
+        pos.x=rand()%height;
+        pos.y=rand()%width;
         DFS(&map,pos,height,width);
+        //Generate_loops(&map,height,width);
     }
 }
 
 void grafo::draw(){
+    //so far does nothing, but at some point will print the map using ncurses
     return;
 }
 
-void grafo::debug(){
+void grafo::debug(){ //prints the map as a  bitmap of directions, pretty tough to read, but good for debugging
     int t;
     for(int i=0;i<height;i++){
         for(int j=0;j<width;j++){
@@ -94,4 +107,5 @@ void grafo::debug(){
     }
     return;
 }
+
 
