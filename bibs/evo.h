@@ -110,7 +110,7 @@ template<class type>void evolutivo<type>::itera(int n,bool verbose){
 template<class type> std::vector<type> evolutivo<type>::transa_por_elitismo(){
 	//calcula qual eh o melhor individuo
 	int best=0;
-	std::vector<numero> nova_geracao;
+	std::vector<type> nova_geracao;
 	for(int i=1;i<notas.size();i++){
 		if(notas[best]<notas[i]) best=i;
 	}
@@ -130,31 +130,43 @@ template<class type> std::vector<type> evolutivo<type>::transa_por_elitismo(){
 template<class type> std::vector<type> evolutivo<type>::transa_por_roleta(){
 	//calcula a soma das notas, para agir como valor maximo do range
 	//negs indica quanto a resposta tem que ser shiftada para abaixo de 0
-	double sum=0,negs=0;
-	for(int i=0;i<notas.size();i++) sum+=(notas[i]>0)?notas[i]:-notas[i];
-	//gera dois numeros aleatorios, uniformemente distribuido, entre [0,sum)
-	double pai=rand(), mae=rand();
-	pai/=RAND_MAX;
-	pai*=sum;
-	mae/=RAND_MAX;
-	mae*=sum;
-	std::cout<<pai<<'\t'<<mae<<std::endl;
-	//seleciona o pai
-	int i=-1;
-	while(pai>0){
-		i++;
-		pai-=notas[i];
+	double sum=0,negs=notas[0];
+	std::vector<type> nova_geracao;
+	for (int i = 0; i < notas.size(); i++) {
+		if (notas[i] < negs) negs = notas[i];
 	}
-	std::cout<<i<<'\t';
-	//seleciona a mae
-	int j=-1;
-	while(mae>0){
-		j++;
-		mae-=notas[j];
+	for (int i = 0; i < notas.size(); i++) {
+		sum += notas[i]-negs;
 	}
-	std::cout<<j<<'\n';
-	exit(0);
-	return individuo;
+		
+	for (int k = 0; k < individuo.size(); k++) {
+		//gera dois numeros aleatorios, uniformemente distribuido, entre [0,sum)
+		double pai = rand(), mae = rand();
+		pai /= RAND_MAX;
+		pai *= sum;
+		mae /= RAND_MAX;
+		mae *= sum;
+		std::cout << pai << '\t' << mae << std::endl;
+
+		//seleciona o pai
+		int i = -1;
+		while (pai > 0) {
+			i++;
+			pai -= notas[i];
+		}
+		std::cout << i << '\t';
+		//seleciona a mae
+		int j = -1;
+		while (mae > 0) {
+			j++;
+			mae -= notas[j];
+		}
+		std::cout << j << '\n';
+
+		nova_geracao.push_back(individuo[j-1].transa(individuo[i-1], range));
+
+	}
+	return nova_geracao;
 }
 
 template<class type> std::vector<type> evolutivo<type>::transa_por_torneio(int n){
