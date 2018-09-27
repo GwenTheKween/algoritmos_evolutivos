@@ -133,13 +133,15 @@ template<class type> std::vector<type> evolutivo<type>::transa_por_roleta(){
 	double sum=0,negs=notas[0];
 	std::vector<type> nova_geracao;
 	for (int i = 0; i < notas.size(); i++) {
-		if (notas[i] < negs) negs = notas[i];
+		if (notas[i] > negs) negs = notas[i];
 	}
 	for (int i = 0; i < notas.size(); i++) {
 		sum += notas[i]-negs;
 	}
-		
-	for (int k = 0; k < individuo.size(); k++) {
+	
+	nova_geracao.push_back(get_best());
+
+	for (int k = 1; k < individuo.size(); k++) {
 		//gera dois numeros aleatorios, uniformemente distribuido, entre [0,sum)
 		double pai = rand(), mae = rand();
 		pai /= RAND_MAX;
