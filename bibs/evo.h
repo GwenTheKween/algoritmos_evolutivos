@@ -133,7 +133,7 @@ template<class type> std::vector<type> evolutivo<type>::transa_por_roleta(){
 	double sum=0,negs=notas[0];
 	std::vector<type> nova_geracao;
 	for (int i = 0; i < notas.size(); i++) {
-		if (notas[i] > negs) negs = notas[i];
+		if (notas[i] < negs) negs = notas[i];
 	}
 	for (int i = 0; i < notas.size(); i++) {
 		sum += notas[i]-negs;
@@ -148,7 +148,7 @@ template<class type> std::vector<type> evolutivo<type>::transa_por_roleta(){
 		pai *= sum;
 		mae /= RAND_MAX;
 		mae *= sum;
-		std::cout << pai << '\t' << mae << std::endl;
+		//std::cout << pai << '\t' << mae << std::endl;
 
 		//seleciona o pai
 		int i = -1;
@@ -156,14 +156,14 @@ template<class type> std::vector<type> evolutivo<type>::transa_por_roleta(){
 			i++;
 			pai -= notas[i];
 		}
-		std::cout << i << '\t';
+		//std::cout << i << '\t';
 		//seleciona a mae
 		int j = -1;
 		while (mae > 0) {
 			j++;
 			mae -= notas[j];
 		}
-		std::cout << j << '\n';
+		//std::cout << j << '\n';
 
 		nova_geracao.push_back(individuo[j-1].transa(individuo[i-1], range));
 
