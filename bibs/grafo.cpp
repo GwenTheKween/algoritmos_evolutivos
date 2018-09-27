@@ -58,20 +58,25 @@ void DFS(char **mat,coord pos,int h, int w){
     }
 }
 
-//Chooses a few random positions to turn into loops
-void generate_loops(char **mat, int h, int w,int n=5){ //n indicates how many new connections should be generated
-    coord pos;
+//Chooses a few random positions to turn into doors
+void generate_loops(char **mat, int h, int w,int n=5){ //n indicates how many doors, and thus loops, are to be generated
+    coord door;
     std::vector<int> dirs;
     int new_dir;
     for(int i=0;i<n;i++){
-        pos.x=rand()%h;
-        pos.y=rand()%w;
+        door.x=rand()%h;
+        door.y=rand()%w;
 
         //directions that have no connection and represent a possible movement
-        if(!(mat[pos.x][pos.y]&UP)      && pos.x > 0)dirs.push_back(UP);
-        if(!(mat[pos.x][pos.y]&DOWN)    && pos.x+1 < h)dirs.push_back(DOWN);
-        if(!(mat[pos.x][pos.y]&LEFT)    && pos.y > 0)dirs.push_back(LEFT);
-        if(!(mat[pos.x][pos.y]&RIGHT)   && pos.y+1 < w)dirs.push_back(RIGHT);
+        if(!(mat[door.x][door.y]&UP)      && door.x > 0)dirs.push_back(UP);
+        if(!(mat[door.x][door.y]&DOWN)    && door.x+1 < h)dirs.push_back(DOWN);
+        if(!(mat[door.x][door.y]&LEFT)    && door.y > 0)dirs.push_back(LEFT);
+        if(!(mat[door.x][door.y]&RIGHT)   && door.y+1 < w)dirs.push_back(RIGHT);
+
+        if(dirs.size()==0){ //no possible directions to open
+            i--;
+            continue;
+        }
 
         //chooses a new direction to connect
         new_dir=rand()%dirs.size();
