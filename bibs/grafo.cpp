@@ -154,4 +154,55 @@ void grafo::debug(){ //prints the map as a  bitmap of directions, pretty tough t
     return;
 }
 
+//method for finding the smallest path between coordinates p1 and p2
+int grafo::BFS(coord p1, coord p2){
+    std::queue<coord> q;
+    coord inc_dist; //when to increment the distance
+    int len=0; //current distance
 
+    //which positions are unvisited so far
+    char unv[height][width];
+    q.push(p1);
+
+    for(int i=0;i<height;i++)
+        for(int j=0;j<width;j++) unv[i][j]=1;
+
+    //chooses the first new direction that the algorithm will follow as the next coordinate to increment distance
+    if(((*this)[p1]) & UP) inc_dist=p1.up();
+    else if(((*this)[p1]) & DOWN) inc_dist = p1.down();
+    else if(((*this)[p1]) & LEFT) inc_dist = p1.left();
+    else if(((*this)[p1]) & RIGHT)inc_dist = p1.right();
+
+    while(!q.empty()){
+        p1=q.front();
+        q.pop();
+        unv[p1.x][p1.y]=0;
+
+        //we reached a new level on the BFS tree, increase the distance and calculates when the new level will be reached
+        if(p1==inc_dist){
+            len++;
+            if((((*this)[p1]) & UP)&& unv[p1.x-1][p1.y]) inc_dist=p1.up();
+            else if((((*this)[p1]) & DOWN)&& unv[p1.x+1][p1.y]) inc_dist = p1.down();
+            else if((((*this)[p1]) & LEFT)&& unv[p1.x][p1.y-1]) inc_dist = p1.left();
+            else if((((*this)[p1]) & RIGHT)&& unv[p1.x][p1.y+1])inc_dist = p1.right();
+        }
+
+        //if the FINAL DESTINATION was reached, return the distance
+        if(p1==p2) return len;
+
+        //adds all possible directions to the queue
+        if(((*this)[p1] & UP)&& unv[p1.x-1][p1.y]) q.push(p1.up());
+        if(((*this)[p1] & DOWN)&& unv[p1.x+1][p1.y]) q.push(p1.down());
+        if(((*this)[p1] & LEFT)&& unv[p1.x][p1.y-1]) q.push(p1.left());
+        if(((*this)[p1] & RIGHT)&& unv[p1.x][p1.y+1]) q.push(p1.right());
+
+    }
+
+    //no path could be found
+    return -1;
+}
+
+int grafo::BFS(int p1x,int p1y,int p2x, int p2y){
+    coord p1(p1x,p1y),p2(p2x,p2y);
+    return BFS(p1,p2);
+}
