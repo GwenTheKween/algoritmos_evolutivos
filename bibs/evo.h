@@ -4,21 +4,34 @@
 #include <vector>
 #include <stdlib.h>
 
+
+//What types of cross-over can be used, translated as integers
 enum tipos_de_transa{
 	ELITISMO = 1,
 	ROLETA,
 	TORNEIO,
 };
 
+
+//what stop conditions can be used
+enum condicoes_de_parada{
+    FIXED=1,
+    STABLE
+};
+
+//class that handles the evolution of the individuals, defined in another 
 template<class type> class evolutivo{
 private:
-	std::vector<type> individuo;
-	std::vector<double> notas;
-	int tipo;
+	std::vector<type> individuo; //current generations of individuals
+	std::vector<double> notas; //current evaluation of said individuals
+	int tipo; // type of cross-over to be used
+    int range; // range of mutation
+    int end_cond;//which end condition was chosen
+    int stable_count; //ho wmany generations have the scores been stable for
 public:
 	//funcoes para inicializacao
 	evolutivo(){}; //presente por motivos de debug
-	evolutivo(std::vector<type>,int = ELITISMO);
+	evolutivo(std::vector<type>,int = ELITISMO,int = FIXED,int = 100);
 	~evolutivo(){};
 
 	//funcoes para pegar parametros
@@ -33,17 +46,21 @@ public:
 	std::vector<type> transa_por_torneio(int = 2);//torneio com n individuos
 };
 
-template<class type> evolutivo<type>::evolutivo(std::vector<type> v,int tipo_transa):
+template<class type> evolutivo<type>::evolutivo(std::vector<type> v,int tipo_transa,int cond_end, int mut_rng):
 	individuo(v), //inicializa o vetor de individuos com os individuos passados
 	notas(v.size(),0), //inicializa um vetor com v.size() zeros
-	tipo(tipo_transa)
+	tipo(tipo_transa),
+    range(mut_rng),
+    end_cond(cond_end),
+    stable_count(0)
 	{
 	int i;
 	for(i=0;i<v.size();i++){
-		notas[i]=v[i].avalia();
+		notas[i]=v[i].avalia(); //calculates all the scores from the start.
 	}
 }
 
+//returns the best fitted individuals
 template<class type>type evolutivo<type>::get_best(){
 	double best=0;
 	for(int i=1;i<notas.size();i++){
@@ -52,14 +69,20 @@ template<class type>type evolutivo<type>::get_best(){
 	return individuo[best];
 }
 
+
+//methd for iterating various generations of the evolution
 template<class type>void evolutivo<type>::itera(int n,bool verbose){
-	for(int gen=0;gen<n;gen++){
+    int gen=0;
+    //      if it has iterated       or     has been stable for
+    //      through all generations         enough generations
+	while((gen<n && end_cond==FIXED) || (stable_count<n && end_cond==STABLE)){
+        double mx=notas[0],sum=notas[0],new_mx;
+        for(int i=1;i<notas.size();i++){
+            if(mx<notas[i])mx=notas[i]; //finds the best evaluation of the generation
+            sum+=notas[i];
+        }
 		if(verbose){
-			double mx=notas[0],sum=notas[0];
-			for(int i=1;i<notas.size();i++){
-				if(mx<notas[i])mx=notas[i];
-				sum+=notas[i];
-			}
+            //prints the average evaluation and the best evaluation
 			std::cout<<gen<<'\t'<<mx<<'\t'<<sum/notas.size()<<'\n';
 		}
 		if(tipo==ELITISMO)
@@ -68,8 +91,19 @@ template<class type>void evolutivo<type>::itera(int n,bool verbose){
 			individuo=transa_por_roleta();
 		else if(tipo==TORNEIO)
 			individuo=transa_por_torneio();
-		for(int i=0;i<individuo.size();i++)
+        //finds the new best evaluation. Should it be the same as last, the generations have stabilized.
+        notas[0]=individuo[0].avalia();
+        new_mx=notas[0];
+		for(int i=1;i<individuo.size();i++){
 			notas[i]=individuo[i].avalia();
+            if(new_mx<notas[i]) new_mx=notas[i];
+        }
+        if(new_mx == mx){
+            stable_count++;
+        }else{
+            stable_count=0;
+        }
+        gen++;
 	}
 }
 
@@ -83,7 +117,7 @@ template<class type> std::vector<type> evolutivo<type>::transa_por_elitismo(){
 	//faz ele transar com todo mundo e avalia os filhos
 	for(int i=0;i<individuo.size();i++){
 		if(i!=best){
-			nova_geracao.push_back(individuo[i].transa(individuo[best]));
+			nova_geracao.push_back(individuo[i].transa(individuo[best],range));
 		}else{
 			nova_geracao.push_back(individuo[i]);
 		}
@@ -91,6 +125,8 @@ template<class type> std::vector<type> evolutivo<type>::transa_por_elitismo(){
 	return nova_geracao;
 }
 
+
+//NAO TA FUNCIONANDO
 template<class type> std::vector<type> evolutivo<type>::transa_por_roleta(){
 	//calcula a soma das notas, para agir como valor maximo do range
 	//negs indica quanto a resposta tem que ser shiftada para abaixo de 0
@@ -148,7 +184,7 @@ template<class type> std::vector<type> evolutivo<type>::transa_por_torneio(int n
 			challenger=rand()%individuo.size();
 			if(notas[challenger]>notas[mae])mae=challenger;
 		}
-		nova_geracao.push_back(individuo[pai].transa(individuo[mae]));
+		nova_geracao.push_back(individuo[pai].transa(individuo[mae],range));
 	}
 	return nova_geracao;
 }
