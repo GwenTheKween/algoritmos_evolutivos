@@ -48,7 +48,8 @@ class grafo{
 private:
     char** map;
     int width,height;
-    std::vector<coord> imp; //important coordinates contain keys, to open the doors
+    std::vector<coord> doors; //important coordinates contain keys, to open the doors
+    std::vector<coord> keys;
 public:
     grafo(){}; //sanity check
     //Initiates the graph with a given height and width. if only one parameter is given, starts a square graph
