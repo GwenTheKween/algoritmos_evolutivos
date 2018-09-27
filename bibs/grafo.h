@@ -1,52 +1,16 @@
 #ifndef GRAFO_LIB
 
 #define GRAFO_LIB
+#include "tile.h"
 #include <stdio.h>
 #include <math.h>
 #include <vector>
 #include <stack>
 #include <queue>
 
-//directions and their respective bits
-enum{
-    UP = 1,
-    DOWN = 2,
-    LEFT = 4,
-    RIGHT = 8
-};
-
-//class to represent a coordinate
-class coord{
-public:
-    int x,y;
-    coord(int a=0,int b=0):x(a),y(b){} // constructor, receives up to 2 numbers as the coordinates.
-
-    bool operator ==(coord other){
-        return ((x==other.x) && (y==other.y));
-    }
-
-    //directions from the current coordinate
-    coord up(){
-        coord c(x-1,y);
-        return c;
-    }
-    coord down(){
-        coord c(x+1,y);
-        return c;
-    }
-    coord left(){
-        coord c(x,y-1);
-        return c;
-    }
-    coord right(){
-        coord c(x,y+1);
-        return c;
-    }
-};
-
 class grafo{
 private:
-    char** map;
+    map m;
     int width,height;
     std::vector<coord> doors; //important coordinates contain keys, to open the doors
     std::vector<coord> keys;
@@ -64,7 +28,7 @@ public:
     char& operator [](coord P){return map[P.x][P.y];}
 
     //Generates a new map, based on a given paramter, if passed. if nothing is passed, generates a new map
-    void gen_map(char** = NULL);
+    void gen_map(tile** = NULL);
     void draw(); //parte do aulos, usando ncurses.
     void debug();
 
