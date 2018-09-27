@@ -150,6 +150,7 @@ template<class type> std::vector<type> evolutivo<type>::transa_por_roleta(){
 		pai *= sum;
 		mae /= RAND_MAX;
 		mae *= sum;
+
 		std::cout << "Valor sorteado (p):" << pai << '\t' << "Valor sorteado (m):" << mae << std::endl;
 
 		//seleciona o pai
@@ -158,14 +159,18 @@ template<class type> std::vector<type> evolutivo<type>::transa_por_roleta(){
 			i++;
 			pai -= notas[i];
 		}
+
 		std::cout << "Pai escolhido:"<< i << '\t';
+
 		//seleciona a mae
 		int j = -1;
 		while (mae > 0) {
 			j++;
 			mae -= notas[j];
 		}
+
 		std::cout << "Mae escolhida:"<< j << '\n';
+
 
 		nova_geracao.push_back(individuo[j].transa(individuo[i], range));
 
