@@ -5,6 +5,6 @@
 int main(){
     grafo g(10);
     g.gen_map(NULL);
-    g.debug();
+    g.draw();
     return 0;
 }

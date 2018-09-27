@@ -76,7 +76,6 @@ void generate_loops(char **mat, int h, int w,int n=5){ //n indicates how many ne
         //chooses a new direction to connect
         new_dir=rand()%dirs.size();
         new_dir=dirs[new_dir];
-        printf("(%d,%d): %d\n",pos.x,pos.y,new_dir);
         mat[pos.x][pos.y]^=new_dir; //adds the direction
 
         //adds the possibility to move back
@@ -120,7 +119,6 @@ void grafo::gen_map(char** model){
         pos.x=rand()%height;
         pos.y=rand()%width;
         DFS(map,pos,height, width);
-        draw();
         generate_loops(map,height,width);
     }
 }
