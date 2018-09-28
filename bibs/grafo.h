@@ -27,6 +27,7 @@ public:
 
     //Generates a new map, based on a given paramter, if passed. if nothing is passed, generates a new map
     void gen_map();
+    void generate_loops(int = 5);
     void draw(); //parte do aulos, usando ncurses.
     void debug();
 

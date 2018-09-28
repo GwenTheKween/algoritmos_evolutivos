@@ -4,7 +4,7 @@
 //Internal functions used only for map generation
 
 //Random DFS to generate a tree as the map. This is only the first step of the map generation
-void DFS(map m,coord pos){
+void DFS(map& m,coord pos){
     std::vector<int> unv;
     std::stack<coord> path;
     int dir;
@@ -29,7 +29,6 @@ void DFS(map m,coord pos){
             dir=unv[dir];
             //the direction is added by xor-ing the position and the direction, because each position is a bitmap of the possible directions
             m.connect(dir,pos);
-            path.push(pos);
             path.push(pos.move(dir));
         }else //if no more paths can be followed from the current position, backtracks to the last position;
             path.pop();
@@ -38,8 +37,26 @@ void DFS(map m,coord pos){
     }
 }
 
+
+//=====================================================================================================================================================
+grafo::grafo(int h, int w):m(h,w){}
+
+grafo::~grafo(){
+    m.~map();
+}
+
+void grafo::gen_map(){
+    //if a model map was passed, copies it into the graph
+    coord pos(rand() % m.h(),rand() % m.w());
+    debug();
+    printf("\n\n");
+    DFS(m,pos);
+    debug();
+    generate_loops();
+}
+
 //Chooses a few random positions to turn into doors
-void generate_loops(map m,int n=5){ //n indicates how many doors, and thus loops, are to be generated
+void grafo::generate_loops(int n){ //n indicates how many doors, and thus loops, are to be generated
     coord door,key;
     std::vector<int> dirs;
     int new_dir;
@@ -59,8 +76,11 @@ void generate_loops(map m,int n=5){ //n indicates how many doors, and thus loops
         //chooses a new direction to connect
         new_dir=rand()%dirs.size();
         new_dir=dirs[new_dir];
+        m[door].lock(new_dir);
 
         key.set(rand() % m.h(), rand() % m.w());
+        doors.push_back(door);
+        keys.push_back(key);
 //        mat[pos.x][pos.y]^=new_dir; //adds the direction
 
         //adds the possibility to move back
@@ -73,37 +93,33 @@ void generate_loops(map m,int n=5){ //n indicates how many doors, and thus loops
     }
 }
 
-//=====================================================================================================================================================
-grafo::grafo(int h, int w):m(h,w){}
-
-grafo::~grafo(){
-    m.~map();
-}
-
-void grafo::gen_map(){
-    //if a model map was passed, copies it into the graph
-    coord pos(rand() % m.h(),rand() % m.w());
-    DFS(m,pos);
-    generate_loops(m);
-}
-
 void grafo::draw(){
     //prints the map using a 3x3 space, very ugly, just for debug sake
     coord p;
+    char body[]={'.','*','^','v','<','>'};
+    int b;
     for(int i=0;i<m.h();i++){
         for(int j=0;j<m.w();j++){
             p.set(i,j);
-            printf(" %c ",(m[p].up())?' ':'.');
+            printf(" %c ",(m[p].up())?'.':' ');
         }
         printf("\n");
         for(int j=0;j<m.w();j++){
             p.set(i,j);
-            printf("%c.%c",(m[p].left())?' ':'.',(m[p].right())?' ':'.');
+            b=0;
+            for(int k=0;k<keys.size() && b==0;k++)   b=(p==keys[k]);
+            for(int k=0;k<doors.size() && b==0 ;k++){
+                if(p==doors[k]){
+                    int lock_dir=m[p].get_lock_dir();
+                    b=2*(lock_dir==UP)+3*(lock_dir==DOWN)+4*(lock_dir==LEFT)+5*(lock_dir==RIGHT);
+                }
+            }
+            printf("%c%c%c",(m[p].left())?'.':' ',body[b],(m[p].right())?'.':' ');
         }
-        printf("|\n");
+        printf("\n");
         for(int j=0;j<m.w();j++){
             p.set(i,j);
-            printf(" %c ",(m[p].down())?' ':'.');
+            printf(" %c ",(m[p].down())?'.':' ');
         }
         printf("\n");
     }
@@ -117,7 +133,8 @@ void grafo::debug(){ //prints the map as a  bitmap of directions, pretty tough t
         for(int j=0;j<m.w();j++){
             p.set(i,j);
             t=m[p];
-            printf("%d%d%d%d\t",t.right(),t.left(),t.down(),t.up());
+            t.debug('\t');
+            //printf("%d%d%d%d\t",t.right(),t.left(),t.down(),t.up());
         }
         printf("\n");
     }

@@ -16,7 +16,7 @@ public:
     {
         t=new tile*[height];
         t[0]=new tile[height*width];
-        for(int i=1;i<height;i++){
+        for(int i=1;i<width;i++){
             t[i]=t[i-1]+height;
         }
     }

@@ -2,45 +2,7 @@
 
 #define TILE_HEADER
 
-#include <iostream>
-
-
-//directions and their respective bits
-enum{
-    UP = 1,
-    DOWN = 2,
-    LEFT = 4,
-    RIGHT = 8
-};
-
-//class to represent a coordinate
-class coord{
-public:
-    int x,y;
-    coord(int a=0,int b=0):x(a),y(b){} // constructor, receives up to 2 numbers as the coordinates.
-
-    bool operator ==(coord other){
-        return ((x==other.x) && (y==other.y));
-    }
-
-    //directions from the current coordinate
-    coord up(){
-        coord c(x-1,y);
-        return c;
-    }
-    coord down(){
-        coord c(x+1,y);
-        return c;
-    }
-    coord left(){
-        coord c(x,y-1);
-        return c;
-    }
-    coord right(){
-        coord c(x,y+1);
-        return c;
-    }
-};
+#include "coord.h"
 
 class tile{
 private:
@@ -54,6 +16,22 @@ public:
     }
     void unlock(){
         dir^=lock_dir;
+    }
+    void lock(int direc){
+        lock_dir = direc;
+    }
+
+    char get_lock_dir(){return lock_dir;}
+
+    void debug(char c='\n'){
+        printf("%d%c",dir,c);
+    }
+
+    bool unconnected(){
+        return dir==0;
+    }
+    bool connected(int direc){
+        return dir&direc;
     }
 
     bool up(){ // if the tile is connected upwards
