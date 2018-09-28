@@ -1,17 +1,15 @@
-#ifndef GRAFO_LIB
+#ifndef GRAFO_HEADER
 
-#define GRAFO_LIB
-#include "tile.h"
+#define GRAFO_HEADER
+#include "mapa.h"
 #include <stdio.h>
 #include <math.h>
 #include <vector>
 #include <stack>
-#include <queue>
 
 class grafo{
 private:
     map m;
-    int width,height;
     std::vector<coord> doors; //important coordinates contain keys, to open the doors
     std::vector<coord> keys;
 public:
@@ -22,13 +20,13 @@ public:
     ~grafo();
 
     //get important coordinates
-    std::vector<coord> get_important(){return imp;}
+//    std::vector<coord> get_important(){return imp;}
 
     //operator overloads
-    char& operator [](coord P){return map[P.x][P.y];}
+    tile& operator [](coord P){return m[P];}
 
     //Generates a new map, based on a given paramter, if passed. if nothing is passed, generates a new map
-    void gen_map(tile** = NULL);
+    void gen_map();
     void draw(); //parte do aulos, usando ncurses.
     void debug();
 

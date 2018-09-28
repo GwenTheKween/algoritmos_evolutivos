@@ -4,8 +4,8 @@
 
 int main(){
     grafo g(10);
-    g.gen_map(NULL);
+    g.gen_map();
     g.draw();
-    printf("%d\n",g.BFS(0,0,3,3));
+    //printf("%d\n",g.BFS(0,0,3,3));
     return 0;
 }
