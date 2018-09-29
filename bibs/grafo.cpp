@@ -57,11 +57,13 @@ void grafo::gen_map(){
 
 //Chooses a few random positions to turn into doors
 void grafo::generate_loops(int n){ //n indicates how many doors, and thus loops, are to be generated
-    coord door,key;
+    coord door(rand()%m.h(),rand()%m.w()),key(rand()%m.h(),rand()%m.w());
     std::vector<int> dirs;
+    std::set<coord>::iterator end = doors_and_keys.end();
     int new_dir;
     for(int i=0;i<n;i++){
-        door.set(rand()%m.h(), rand()%m.w());
+        while(doors_and_keys.find(door) != end) 
+            door.set(rand()%m.h(), rand()%m.w());
 
         //directions that have no connection and represent a possible movement
         for(int j=0;j<dir_size;j++){
@@ -70,17 +72,24 @@ void grafo::generate_loops(int n){ //n indicates how many doors, and thus loops,
 
         if(dirs.size()==0){ //no possible directions to open
             i--;
+            //a new door has to be chosen, otherwise this turns into an infinite loop
+            door.set(rand()%m.h(), rand()%m.w());
             continue;
         }
 
-        //chooses a new direction to connect
+        //chooses a new direction to connect and turns the tile into a door
         new_dir=rand()%dirs.size();
         new_dir=dirs[new_dir];
         m[door].lock(new_dir);
 
-        key.set(rand() % m.h(), rand() % m.w());
+        //if this tile can be turned into a door, add it to the set before choosing the key
+        //to make sure that they dont end up in the same place
+        doors_and_keys.insert(door);
+        while(doors_and_keys.find(key)!=end)
+            key.set(rand() % m.h(), rand() % m.w());
         doors.push_back(door);
         keys.push_back(key);
+        doors_and_keys.insert(key);
 //        mat[pos.x][pos.y]^=new_dir; //adds the direction
 
         //adds the possibility to move back

@@ -6,14 +6,16 @@
 #include <math.h>
 #include <vector>
 #include <stack>
+#include <set>
 
 class grafo{
 private:
     map m;
     std::vector<coord> doors; //important coordinates contain keys, to open the doors
     std::vector<coord> keys;
+    std::set<coord> doors_and_keys;//all cdoors and keys toghether, so that no tile can be chosen twice
 public:
-    grafo(){}; //sanity check
+    grafo(){}; //sanity 
     //Initiates the graph with a given height and width. if only one parameter is given, starts a square graph
     grafo(int,int = -1);
     //graph destructor

@@ -32,6 +32,11 @@ public:
     bool operator ==(coord other){
         return ((X==other.X) && (Y==other.Y));
     }
+    bool operator <(const coord other)const{
+        if(X==other.X)
+            return Y<other.Y;
+        return X<other.X;
+    }
 
     //returns the coordinate after the desired movement
     coord move(int dir){
