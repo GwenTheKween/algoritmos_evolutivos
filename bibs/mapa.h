@@ -89,6 +89,13 @@ public:
         //no path could be found
         return -1;
     }
+
+    void unlock(coord pos){
+        int dir;
+        dir=(*this)[pos].get_lock_dir();
+        (*this)[pos].unlock();
+        (*this)[pos.move(dir)].add_dir(dir^((dir<LEFT)?(DOWN|UP):(LEFT|RIGHT)));
+    }
 };
 
 #endif

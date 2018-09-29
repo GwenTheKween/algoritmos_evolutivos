@@ -22,7 +22,8 @@ public:
     ~grafo();
 
     //get important coordinates
-//    std::vector<coord> get_important(){return imp;}
+    std::vector<coord> get_keys(){return keys;}
+    std::vector<coord> get_doors(){return doors;}
 
     //operator overloads
     tile& operator [](coord P){return m[P];}
@@ -36,6 +37,7 @@ public:
     //calculates the minimun distance between 2 points
     int BFS(coord,coord);
     int BFS(int,int,int,int);
+    void unlock(coord);
 };
 
 

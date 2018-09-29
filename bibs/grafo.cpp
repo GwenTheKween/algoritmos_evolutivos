@@ -48,10 +48,7 @@ grafo::~grafo(){
 void grafo::gen_map(){
     //if a model map was passed, copies it into the graph
     coord pos(rand() % m.h(),rand() % m.w());
-    debug();
-    printf("\n\n");
     DFS(m,pos);
-    debug();
     generate_loops();
 }
 
@@ -158,4 +155,25 @@ int grafo::BFS(coord p1, coord p2){
 int grafo::BFS(int p1x,int p1y,int p2x, int p2y){
     coord p1(p1x,p1y),p2(p2x,p2y);
     return m.BFS(p1,p2);
+}
+
+void grafo::unlock(coord key){
+    coord door;
+    int i;
+    for(i=0;i<keys.size();i++){
+        if(keys[i]==key){
+            door=doors[i];
+            break;
+        }
+    }
+    if(i==keys.size()) return; //invali key
+
+    //unlocks the door
+    m.unlock(door);
+
+    //removes this door and key from the graph
+    doors_and_keys.erase(door);
+    doors_and_keys.erase(key);
+    keys.erase(keys.begin()+i);
+    doors.erase(doors.begin()+i);
 }
