@@ -32,6 +32,9 @@ public:
     bool operator ==(coord other){
         return ((X==other.X) && (Y==other.Y));
     }
+    bool operator !=(coord other){
+        return !(*this==other);
+    }
     bool operator <(const coord other)const{
         if(X==other.X)
             return Y<other.Y;
@@ -46,6 +49,9 @@ public:
         else if(dir == RIGHT) return coord(X,Y+1);
     }
 
+    void debug(char c){
+        std::cout<<'('<<X<<','<<Y<<')'<<c;
+    }
 };
 
 #endif

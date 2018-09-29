@@ -148,11 +148,11 @@ void grafo::debug(){ //prints the map as a  bitmap of directions, pretty tough t
 }
 
 //method for finding the smallest path between coordinates p1 and p2
-int grafo::BFS(coord p1, coord p2){
+std::vector<coord> grafo::BFS(coord p1, coord p2){
     return m.BFS(p1,p2);
 }
 
-int grafo::BFS(int p1x,int p1y,int p2x, int p2y){
+std::vector<coord> grafo::BFS(int p1x,int p1y,int p2x, int p2y){
     coord p1(p1x,p1y),p2(p2x,p2y);
     return m.BFS(p1,p2);
 }

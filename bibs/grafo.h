@@ -35,8 +35,8 @@ public:
     void debug();
 
     //calculates the minimun distance between 2 points
-    int BFS(coord,coord);
-    int BFS(int,int,int,int);
+    std::vector<coord> BFS(coord,coord);
+    std::vector<coord> BFS(int,int,int,int);
     void unlock(coord);
 };
 

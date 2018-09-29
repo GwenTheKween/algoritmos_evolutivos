@@ -4,6 +4,7 @@
 
 #include "tile.h"
 #include <queue>
+#include <algorithm>
 
 class map{
 private:
@@ -43,51 +44,59 @@ public:
         t[c.x()][c.y()].add_dir((dir<=DOWN)?(dir^(DOWN|UP)):(dir^(LEFT|RIGHT)));
     }
 
-    int BFS(coord p1,coord p2){
+    //return the smallest path from p1 to p2 EXCLUDING P1
+    std::vector<coord> BFS(coord p1,coord p2){
         std::queue<coord> q;
-        coord inc_dist; //when to increment the distance
-        int len=0; //current distance
+        std::vector<coord> path;
+        //matriz indicating which was the coordinate prior to his one
+        coord parent[height][width];
+        coord unvisited(-1,-1);
 
-        //which positions are unvisited so far
-        char unv[height][width];
         q.push(p1);
 
         for(int i=0;i<height;i++)
-            for(int j=0;j<width;j++) unv[i][j]=1;
+            for(int j=0;j<width;j++) parent[i][j].set(-1,-1);
+        //coordinate -1,-1 indicates that this tile was not visited yet
 
-        //chooses the first new direction that the algorithm will follow as the next coordinate to increment distance
-        if(((*this)[p1]).up()) inc_dist=p1.move(UP);
-        else if(((*this)[p1]).down()) inc_dist = p1.move(DOWN);
-        else if(((*this)[p1]).left()) inc_dist = p1.move(LEFT);
-        else if(((*this)[p1]).right())inc_dist = p1.move(RIGHT);
+        //sets the first tile to be it's own parent as the end condition
+        parent[p1.x()][p1.y()]=p1; 
 
         while(!q.empty()){
             p1=q.front();
             q.pop();
-            unv[p1.x()][p1.y()]=0;
 
-            //we reached a new level on the BFS tree, increase the distance and calculates when the new level will be reached
-            if(p1==inc_dist){
-                len++;
-                if((((*this)[p1]).up())&& unv[p1.x()-1][p1.y()]) inc_dist=p1.move(UP);
-                else if((((*this)[p1]).down())&& unv[p1.x()+1][p1.y()]) inc_dist = p1.move(DOWN);
-                else if((((*this)[p1]).left())&& unv[p1.x()][p1.y()-1]) inc_dist = p1.move(LEFT);
-                else if((((*this)[p1]).right())&& unv[p1.x()][p1.y()+1])inc_dist = p1.move(RIGHT);
-            }
-
-            //if the FINAL DESTINATION was reached, return the distance
-            if(p1==p2) return len;
+            //if the FINAL DESTINATION was reached, exit the loop
+            if(p1==p2) break;
 
             //adds all possible directions to the queue
-            if(((*this)[p1].up())&& unv[p1.x()-1][p1.y()]) q.push(p1.move(UP));
-            if(((*this)[p1].down())&& unv[p1.x()+1][p1.y()]) q.push(p1.move(DOWN));
-            if(((*this)[p1].left())&& unv[p1.x()][p1.y()-1]) q.push(p1.move(LEFT));
-            if(((*this)[p1].right())&& unv[p1.x()][p1.y()+1]) q.push(p1.move(RIGHT));
+            if(((*this)[p1].up())&& parent[p1.x()-1][p1.y()]==unvisited){
+                q.push(p1.move(UP));
+                parent[p1.x()-1][p1.y()]=p1;
+            }
+            if(((*this)[p1].down())&& parent[p1.x()+1][p1.y()]==unvisited){
+                q.push(p1.move(DOWN));
+                parent[p1.x()+1][p1.y()]=p1;
+            }
+            if(((*this)[p1].left())&& parent[p1.x()][p1.y()-1]==unvisited){
+                q.push(p1.move(LEFT));
+                parent[p1.x()][p1.y()-1]=p1;
+            }
+            if(((*this)[p1].right())&& parent[p1.x()][p1.y()+1]==unvisited){
+                q.push(p1.move(RIGHT));
+                parent[p1.x()][p1.y()+1]=p1;
+            }
 
         }
-
-        //no path could be found
-        return -1;
+        if(parent[p2.x()][p2.y()]==unvisited) return path;//empty because no path could be found
+        path.push_back(p2);
+        p1=parent[p2.x()][p2.y()];
+        while(p1!=parent[p1.x()][p1.y()]){
+            path.push_back(p1);
+            p1=parent[p1.x()][p1.y()];
+        }
+        //path is reversed, must change it back
+        std::reverse(path.begin(),path.end());
+        return path;
     }
 
     void unlock(coord pos){
