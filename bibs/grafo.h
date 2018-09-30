@@ -18,6 +18,8 @@ public:
     grafo(){}; //sanity 
     //Initiates the graph with a given height and width. if only one parameter is given, starts a square graph
     grafo(int,int = -1);
+    //instantiates a new graph based on a given model
+    grafo(grafo&);
     //graph destructor
     ~grafo();
 

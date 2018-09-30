@@ -17,8 +17,20 @@ public:
     {
         t=new tile*[height];
         t[0]=new tile[height*width];
-        for(int i=1;i<width;i++){
-            t[i]=t[i-1]+height;
+        for(int i=1;i<height;i++){
+            t[i]=t[i-1]+width;
+        }
+    }
+    map(map& model):
+        height(model.h()),
+        width(model.w())
+    {
+        int i,j;
+        t=new tile*[height];
+        t[0]=new tile[height*width];
+        for(i=1;i<height;i++){
+            t[i]=t[i-1]+width;
+            for(j=0;j<width;j++) t[i][j]=model.t[i][j];
         }
     }
     ~map(){

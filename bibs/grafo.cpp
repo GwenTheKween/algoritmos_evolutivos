@@ -41,6 +41,13 @@ void DFS(map& m,coord pos){
 //=====================================================================================================================================================
 grafo::grafo(int h, int w):m(h,w){}
 
+grafo::grafo(grafo& model):
+    m(model.m),
+    doors(model.doors),
+    keys(model.keys),
+    doors_and_keys(model.doors_and_keys)
+    {}
+
 grafo::~grafo(){
     m.~map();
 }
