@@ -49,3 +49,23 @@ void robo::debug(){
     }
     printf("\n");
 }
+
+void robo::mutacao(grafo& model){
+    //sem cross-over, eh necessario atualizar o grafo, pois todas as chaves ja foram usadas
+    g=model;
+    int i,j;
+    coord temp;
+    //chooses 2 random coordinates to change
+    i=rand()%gene.size();
+    //-1 and possibly adding 1 to j assures that coordinates mus be different
+    j=rand()%(gene.size()-1);
+    j+=(j>=i);
+
+    //swaps the 2 positions
+    temp=gene[i];
+    gene[i]=gene[j];
+    gene[j]=temp;
+
+    //clears the path, so a new one can be generated
+    path.clear();
+}

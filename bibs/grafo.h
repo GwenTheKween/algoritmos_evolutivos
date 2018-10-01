@@ -29,6 +29,7 @@ public:
 
     //operator overloads
     tile& operator [](coord P){return m[P];}
+    grafo& operator =(const grafo& other);
 
     //Generates a new map
     void gen_map();

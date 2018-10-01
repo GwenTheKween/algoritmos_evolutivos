@@ -44,6 +44,27 @@ public:
 
     tile& operator [](coord P){ return t[P.x()][P.y()];}
 
+    map& operator =(const map& other){
+        if((height != other.height)||(width !=other.width)){
+            delete[] t[0];
+            delete[] t;
+            t=new tile*[height];
+            t[0]=new tile[height*width];
+            int i,j;
+            for (j=0;j<width;j++) t[0][j]=other.t[0][j];
+            for(i=1;i<height;i++){
+                t[i]=t[i-1]+width;
+                for(j=0;j<width;j++) t[i][j]=other.t[i][j];
+            }
+        }else{
+            for(int i=0;i<height;i++){
+                for(int j=0;j<width;j++){
+                    t[i][j]=other.t[i][j];
+                }
+            }
+        }
+    }
+
     bool can_move(coord pos,int dir){
         return  ((dir == UP) && pos.x() > 0)        ||
                 ((dir ==DOWN)&& pos.x() < height -1)||

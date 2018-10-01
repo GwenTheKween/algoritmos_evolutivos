@@ -7,8 +7,9 @@ int main(){
     grafo g(10);
     std::vector<coord> keys,doors;
     g.gen_map();
-    g.draw();
     robo r(g);
+    r.debug();
+    r.mutacao(g);
     r.debug();
     return 0;
 }

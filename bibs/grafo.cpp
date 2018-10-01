@@ -52,6 +52,13 @@ grafo::~grafo(){
     m.~map();
 }
 
+grafo& grafo::operator =(const grafo& other){
+    m=other.m;
+    keys=other.keys;
+    doors=other.doors;
+    doors_and_keys=other.doors_and_keys;
+}
+
 void grafo::gen_map(){
     //if a model map was passed, copies it into the graph
     coord pos(rand() % m.h(),rand() % m.w());

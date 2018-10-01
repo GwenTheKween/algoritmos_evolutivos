@@ -17,6 +17,8 @@ public:
     void simulate();
     int avalia();
     void debug();
+
+    void mutacao(grafo&);
 };
 
 #endif
