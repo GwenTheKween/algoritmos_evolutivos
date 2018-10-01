@@ -36,7 +36,6 @@ void robo::debug(){
         gene[i].debug('\t');
     }
     printf("\n");
-    std::cout<<avalia()<<'\n';
     for(int i=0;i<path.size();i++){
         path[i].debug(' ');
         if(path[i]==gene[k]){
@@ -48,6 +47,7 @@ void robo::debug(){
         }
     }
     printf("\n");
+    std::cout<<avalia()<<'\n';
 }
 
 void robo::mutacao(grafo& model){

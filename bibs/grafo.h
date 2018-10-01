@@ -32,8 +32,8 @@ public:
     grafo& operator =(const grafo& other);
 
     //Generates a new map
-    void gen_map();
-    void generate_loops(int = 5);
+    void gen_map(int = 5);
+    void generate_loops(int);
     void draw(); //parte do aulos, usando ncurses.
     void debug();
 

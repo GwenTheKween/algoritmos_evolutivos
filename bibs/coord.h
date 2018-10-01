@@ -15,6 +15,13 @@ enum{
 const int direction[] = {UP, DOWN, LEFT, RIGHT};
 const int dir_size = 4;
 
+/*
+int invert(int dir){
+    if(dir<LEFT) return dir^(UP|DOWN);
+    return dir^(RIGHT|LEFT);
+}
+*/
+
 //class to represent a coordinate
 class coord{
 private:

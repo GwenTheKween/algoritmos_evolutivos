@@ -59,11 +59,11 @@ grafo& grafo::operator =(const grafo& other){
     doors_and_keys=other.doors_and_keys;
 }
 
-void grafo::gen_map(){
+void grafo::gen_map(int n){
     //if a model map was passed, copies it into the graph
     coord pos(rand() % m.h(),rand() % m.w());
     DFS(m,pos);
-    generate_loops();
+    generate_loops(n);
 }
 
 //Chooses a few random positions to turn into doors
@@ -78,7 +78,10 @@ void grafo::generate_loops(int n){ //n indicates how many doors, and thus loops,
 
         //directions that have no connection and represent a possible movement
         for(int j=0;j<dir_size;j++){
-            if((!(m[door].connected(direction[j]))) && m.can_move(door,direction[j])) dirs.push_back(direction[j]);
+            if((!(m[door].connected(direction[j]))) && 
+                  m.can_move(door,direction[j]) && 
+                  (m[door.move(direction[j])].get_lock_dir() != (direction[j]^((direction[j]<LEFT)?(UP|DOWN):(LEFT|RIGHT))))) 
+                    dirs.push_back(direction[j]);
         }
 
         if(dirs.size()==0){ //no possible directions to open
