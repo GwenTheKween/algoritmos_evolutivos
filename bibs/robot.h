@@ -16,6 +16,7 @@ public:
 
     void simulate();
     int avalia();
+    void debug();
 };
 
 #endif

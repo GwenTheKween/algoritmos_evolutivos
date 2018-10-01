@@ -28,6 +28,7 @@ public:
         int i,j;
         t=new tile*[height];
         t[0]=new tile[height*width];
+        for(j=0;j<width;j++) t[0][j]=model.t[0][j];
         for(i=1;i<height;i++){
             t[i]=t[i-1]+width;
             for(j=0;j<width;j++) t[i][j]=model.t[i][j];

@@ -28,3 +28,24 @@ int robo::avalia(){
     if(path.size()==0) simulate();
     return path.size();
 }
+
+void robo::debug(){
+    int k=0;
+    g.draw();
+    for(int i=0;i<gene.size();i++){
+        gene[i].debug('\t');
+    }
+    printf("\n");
+    std::cout<<avalia()<<'\n';
+    for(int i=0;i<path.size();i++){
+        path[i].debug(' ');
+        if(path[i]==gene[k]){
+            printf("\n");
+            g.unlock(path[i]);
+            g.draw();
+            path[i].debug(' ');
+            k++;
+        }
+    }
+    printf("\n");
+}
