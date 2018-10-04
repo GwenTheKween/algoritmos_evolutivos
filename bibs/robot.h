@@ -9,15 +9,15 @@ private:
     std::vector<coord> gene;
     std::vector<coord> path;
 public:
+    robo(robo&);
     robo(grafo&);
-    ~robo(){
-        g.~grafo();
-    }
+    ~robo(){}
 
     void simulate();
     int avalia();
     void debug();
 
+    robo transa(robo&,grafo&);
     void mutacao(grafo&);
 };
 

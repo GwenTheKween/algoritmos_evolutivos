@@ -13,7 +13,7 @@ private:
     map m;
     std::vector<coord> doors; //important coordinates contain keys, to open the doors
     std::vector<coord> keys;
-    std::set<coord> doors_and_keys;//all cdoors and keys toghether, so that no tile can be chosen twice
+//    std::set<coord> doors_and_keys;//all cdoors and keys toghether, so that no tile can be chosen twice
 public:
     grafo(){}; //sanity 
     //Initiates the graph with a given height and width. if only one parameter is given, starts a square graph
@@ -21,7 +21,7 @@ public:
     //instantiates a new graph based on a given model
     grafo(grafo&);
     //graph destructor
-    ~grafo();
+    ~grafo(){};
 
     //get important coordinates
     std::vector<coord> get_keys(){return keys;}

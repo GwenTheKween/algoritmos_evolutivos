@@ -1,5 +1,10 @@
 #include "robot.h"
 
+robo::robo(robo& parent):
+    g(parent.g),
+    gene(parent.gene)
+    {}
+
 robo::robo(grafo& model):
     g(model){
         //coordenadas das chaves presentes no mapa
@@ -26,7 +31,7 @@ void robo::simulate(){
 
 int robo::avalia(){
     if(path.size()==0) simulate();
-    return path.size();
+    return -path.size();
 }
 
 void robo::debug(){
@@ -38,7 +43,7 @@ void robo::debug(){
     printf("\n");
     for(int i=0;i<path.size();i++){
         path[i].debug(' ');
-        if(path[i]==gene[k]){
+        if(path[i]==gene[k] && k<gene.size()){
             printf("\n");
             g.unlock(path[i]);
             g.draw();
@@ -48,6 +53,12 @@ void robo::debug(){
     }
     printf("\n");
     std::cout<<avalia()<<'\n';
+}
+
+robo robo::transa(robo& r, grafo& model){
+    robo filho(r);
+    filho.mutacao(model);
+    return filho;
 }
 
 void robo::mutacao(grafo& model){

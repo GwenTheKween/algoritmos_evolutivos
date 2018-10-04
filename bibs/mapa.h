@@ -21,11 +21,29 @@ public:
             t[i]=t[i-1]+width;
         }
     }
+    map(const map& m){ //copy constructor -.-'
+        std::cout<<1<<'\n';
+        coord c;
+        for(int i=0;i<height;i++){
+            for(int j=0;j<width;j++){
+                t[i][j]=m.t[i][j];
+            }
+        }
+    }
+    map(map&& m){ //move constructor
+        std::cout<<2<<'\n';
+        height = m.height;
+        width = m.width;
+        delete[] t[0];
+        delete[] t;
+        t=m.t;
+    }
     map(map& model):
         height(model.h()),
         width(model.w())
     {
         int i,j;
+        std::cout<<3<<'\n';
         t=new tile*[height];
         t[0]=new tile[height*width];
         for(j=0;j<width;j++) t[0][j]=model.t[0][j];
@@ -42,9 +60,10 @@ public:
     int h(){return height;}
     int w(){return width;}
 
-    tile& operator [](coord P){ return t[P.x()][P.y()];}
+    tile& operator [](coord P)const { return t[P.x()][P.y()];}
 
     map& operator =(const map& other){
+        /*
         if((height != other.height)||(width !=other.width)){
             delete[] t[0];
             delete[] t;
@@ -57,11 +76,21 @@ public:
                 for(j=0;j<width;j++) t[i][j]=other.t[i][j];
             }
         }else{
+        */
             for(int i=0;i<height;i++){
                 for(int j=0;j<width;j++){
                     t[i][j]=other.t[i][j];
                 }
             }
+        //}
+    }
+    map& operator = (map&& m) noexcept{
+        if(this != &m){
+            delete[] t[0];
+            delete[] t;
+            t=m.t;
+            height=m.height;
+            width=m.width;
         }
     }
 

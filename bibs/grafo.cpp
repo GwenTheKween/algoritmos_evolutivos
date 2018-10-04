@@ -44,19 +44,15 @@ grafo::grafo(int h, int w):m(h,w){}
 grafo::grafo(grafo& model):
     m(model.m),
     doors(model.doors),
-    keys(model.keys),
-    doors_and_keys(model.doors_and_keys)
+    keys(model.keys)
+//    doors_and_keys(model.doors_and_keys)
     {}
-
-grafo::~grafo(){
-    m.~map();
-}
 
 grafo& grafo::operator =(const grafo& other){
     m=other.m;
     keys=other.keys;
     doors=other.doors;
-    doors_and_keys=other.doors_and_keys;
+//    doors_and_keys=other.doors_and_keys;
 }
 
 void grafo::gen_map(int n){
@@ -70,11 +66,22 @@ void grafo::gen_map(int n){
 void grafo::generate_loops(int n){ //n indicates how many doors, and thus loops, are to be generated
     coord door(rand()%m.h(),rand()%m.w()),key(rand()%m.h(),rand()%m.w());
     std::vector<int> dirs;
-    std::set<coord>::iterator end = doors_and_keys.end();
+    bool already_chosen;
+//    std::set<coord>::iterator end = doors_and_keys.end();
     int new_dir;
     for(int i=0;i<n;i++){
-        while(doors_and_keys.find(door) != end) 
-            door.set(rand()%m.h(), rand()%m.w());
+        door.set(rand()%m.h(),rand()%m.w());
+
+        already_chosen = false;
+        for(int j=0;j<doors.size() && !already_chosen;j++){
+            already_chosen = (door == doors[j]) || (door == keys[j]);
+        }
+        if(already_chosen){
+            i--;
+            continue;
+        }
+//        while(doors_and_keys.find(door) != end) 
+//            door.set(rand()%m.h(), rand()%m.w());
 
         //directions that have no connection and represent a possible movement
         for(int j=0;j<dir_size;j++){
@@ -98,14 +105,24 @@ void grafo::generate_loops(int n){ //n indicates how many doors, and thus loops,
 
         //if this tile can be turned into a door, add it to the set before choosing the key
         //to make sure that they dont end up in the same place
-        doors_and_keys.insert(door);
-        while(doors_and_keys.find(key)!=end)
-            key.set(rand() % m.h(), rand() % m.w());
+//        doors_and_keys.insert(door);
+
+        key.set(rand()%m.h(),rand()%m.w());
+
+        already_chosen = false;
+        for(int j=0;j<doors.size() && !already_chosen;j++){
+            already_chosen = (key == doors[j]) || (key == keys[j]);
+        }
+        if(already_chosen){
+            i--;
+            continue;
+        }
+//        while(doors_and_keys.find(key)!=end)
+//            key.set(rand() % m.h(), rand() % m.w());
         doors.push_back(door);
         keys.push_back(key);
-        doors_and_keys.insert(key);
+//        doors_and_keys.insert(key);
 //        mat[pos.x][pos.y]^=new_dir; //adds the direction
-
         //adds the possibility to move back
 //        if(new_dir==UP)     mat[pos.x-1][pos.y]^=DOWN;
 //        else if(new_dir==DOWN)   mat[pos.x+1][pos.y]^=UP;
@@ -189,8 +206,8 @@ void grafo::unlock(coord key){
     m.unlock(door);
 
     //removes this door and key from the graph
-    doors_and_keys.erase(door);
-    doors_and_keys.erase(key);
+//    doors_and_keys.erase(door);
+//    doors_and_keys.erase(key);
     keys.erase(keys.begin()+i);
     doors.erase(doors.begin()+i);
 }
