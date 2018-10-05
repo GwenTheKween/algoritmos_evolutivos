@@ -1,5 +1,12 @@
 #include "robot.h"
 
+void wait(double delay){
+    double now,later;
+    now=time(NULL);
+    later=now+delay;
+    while(now<later) now=time(NULL);
+}
+
 robo::robo(const robo& parent):
     g(parent.g),
     gene(parent.gene)
@@ -23,9 +30,11 @@ void robo::simulate(){
     path.push_back(start);
     leg=g.BFS(start,gene[0]);
     path.insert(path.end(),leg.begin(),leg.end()); //concatenates the leg after the path
+    g.unlock(gene[0]);
     for(i=1;i<gene.size();i++){
         leg=g.BFS(gene[i-1],gene[i]);
         path.insert(path.end(),leg.begin(),leg.end());
+        g.unlock(gene[i]);
     }
     leg=g.BFS(gene[i-1],start);
     path.insert(path.end(),leg.begin(),leg.end());
@@ -80,4 +89,23 @@ void robo::mutacao(){
 
     //clears the path, so a new one can be generated
     path.clear();
+}
+
+void robo::animate(){
+    int k=0;
+    coord end(0,0);
+    simulate();
+    g.reset();
+    for(int i=0;i<path.size();i++){
+        system("clear");
+        g.animate(path[i]);
+        if(k<gene.size() && path[i] == gene[k]){
+            g.unlock(path[i]);
+            k++;
+        }
+        if(k<gene.size())gene[k].debug(' ');
+        else end.debug(' ');
+        printf("%d\n",path.size());
+        wait(0.01);
+    }
 }

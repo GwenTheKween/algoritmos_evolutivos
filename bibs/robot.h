@@ -19,6 +19,7 @@ public:
 
     robo transa(robo&,int);
     void mutacao();
+    void animate();
 };
 
 #endif
