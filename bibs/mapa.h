@@ -22,7 +22,6 @@ public:
         }
     }
     map(const map& m){ //copy constructor -.-'
-        std::cout<<1<<'\n';
         coord c;
         height = m.height;
         width = m.width;
@@ -36,7 +35,6 @@ public:
         }
     }
     map(map&& m){ //move constructor
-        std::cout<<2<<'\n';
         height = m.height;
         width = m.width;
         delete[] t[0];
@@ -48,7 +46,6 @@ public:
         width(model.w())
     {
         int i,j;
-        std::cout<<3<<'\n';
         t=new tile*[height];
         t[0]=new tile[height*width];
         for(j=0;j<width;j++) t[0][j]=model.t[0][j];
