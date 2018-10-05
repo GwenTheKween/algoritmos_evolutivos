@@ -1,9 +1,11 @@
 #include "robot.h"
 
-robo::robo(robo& parent):
+robo::robo(const robo& parent):
     g(parent.g),
     gene(parent.gene)
-    {}
+    {
+        g.reset();//assume que o mapa ja foi imulado
+    }
 
 robo::robo(grafo& model):
     g(model){
@@ -55,15 +57,14 @@ void robo::debug(){
     std::cout<<avalia()<<'\n';
 }
 
-robo robo::transa(robo& r, grafo& model){
+robo robo::transa(robo& r, int legacy){
     robo filho(r);
-    filho.mutacao(model);
+    filho.mutacao();
     return filho;
 }
 
-void robo::mutacao(grafo& model){
+void robo::mutacao(){
     //sem cross-over, eh necessario atualizar o grafo, pois todas as chaves ja foram usadas
-    g=model;
     int i,j;
     coord temp;
     //chooses 2 random coordinates to change

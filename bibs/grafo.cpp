@@ -41,7 +41,7 @@ void DFS(map& m,coord pos){
 //=====================================================================================================================================================
 grafo::grafo(int h, int w):m(h,w){}
 
-grafo::grafo(grafo& model):
+grafo::grafo(const grafo& model):
     m(model.m),
     doors(model.doors),
     keys(model.keys)
@@ -200,7 +200,7 @@ void grafo::unlock(coord key){
             break;
         }
     }
-    if(i==keys.size()) return; //invali key
+    if(i==keys.size()) return; //invalid key
 
     //unlocks the door
     m.unlock(door);
@@ -208,6 +208,12 @@ void grafo::unlock(coord key){
     //removes this door and key from the graph
 //    doors_and_keys.erase(door);
 //    doors_and_keys.erase(key);
-    keys.erase(keys.begin()+i);
-    doors.erase(doors.begin()+i);
+//    keys.erase(keys.begin()+i);
+//    doors.erase(doors.begin()+i);
+}
+
+void grafo::reset(){
+    for(int i=0;i<doors.size();i++){
+        m.unlock(doors[i]);
+    }
 }

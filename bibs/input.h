@@ -96,7 +96,7 @@ void proc_argv(int argc,char** argv,int* proc){
         char* prog_name: the name of the program being run
     @Return: void
 */
-void print_help(char* prog__name){
+void print_help(char* prog_name){
 	printf("USAGE: %s -t <type> <endCondition> [<options>]\n",prog_name);
 	printf("\t-t:\t\t type of cross-over used for the algorithm, there are 3 possible types:\n");
 	printf("\t\telitismo(e): the best performing is used to cross-over with all others\n");

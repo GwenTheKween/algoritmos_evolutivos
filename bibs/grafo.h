@@ -19,7 +19,7 @@ public:
     //Initiates the graph with a given height and width. if only one parameter is given, starts a square graph
     grafo(int,int = -1);
     //instantiates a new graph based on a given model
-    grafo(grafo&);
+    grafo(const grafo&);
     //graph destructor
     ~grafo(){};
 
@@ -41,6 +41,7 @@ public:
     std::vector<coord> BFS(coord,coord);
     std::vector<coord> BFS(int,int,int,int);
     void unlock(coord);
+    void reset();
 };
 
 
