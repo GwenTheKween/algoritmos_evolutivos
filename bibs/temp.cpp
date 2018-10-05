@@ -18,8 +18,8 @@ int main(int argc,char** argv){
             robo r(g);
             ind.push_back(r);
         }
-//        evolutivo<robo> e(ind,processed[TIPO_TRANSA],processed[COND_FIM]);
-//        e.itera(processed[GEN_AMNT],processed[VERBOSE]);
+        evolutivo<robo> e(ind,processed[TIPO_TRANSA],processed[COND_FIM]);
+        e.itera(processed[GEN_AMNT],processed[VERBOSE]);
     }
     return 0;
 }
