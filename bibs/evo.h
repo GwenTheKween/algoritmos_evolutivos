@@ -136,7 +136,8 @@ template<class type> std::vector<type> evolutivo<type>::transa_por_roleta(){
 		if (notas[i] < negs) negs = notas[i];
 	}
 	for (int i = 0; i < notas.size(); i++) {
-		sum += notas[i]-negs;
+        notas[i]-=negs;
+		sum += notas[i];
 	}
 		
 	for (int k = 0; k < individuo.size(); k++) {

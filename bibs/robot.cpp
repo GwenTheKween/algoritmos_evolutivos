@@ -4,7 +4,7 @@ robo::robo(const robo& parent):
     g(parent.g),
     gene(parent.gene)
     {
-        g.reset();//assume que o mapa ja foi imulado
+        g.reset();//assume que o mapa ja foi simulado
     }
 
 robo::robo(grafo& model):
