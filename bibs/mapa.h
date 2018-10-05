@@ -24,6 +24,11 @@ public:
     map(const map& m){ //copy constructor -.-'
         std::cout<<1<<'\n';
         coord c;
+        height = m.height;
+        width = m.width;
+        t=new tile*[height];
+        t[0] = new tile[height*width];
+        for(int i=1;i<height;i++) t[i]=t[i-1]+width;
         for(int i=0;i<height;i++){
             for(int j=0;j<width;j++){
                 t[i][j]=m.t[i][j];
