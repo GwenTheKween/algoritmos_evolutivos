@@ -1,10 +1,7 @@
 #include "robot.h"
 
-void wait(double delay){
-    double now,later;
-    now=time(NULL);
-    later=now+delay;
-    while(now<later) now=time(NULL);
+void wait(int delay){
+    while(delay>0) delay--;
 }
 
 robo::robo(const robo& parent):
@@ -66,7 +63,7 @@ void robo::debug(){
     std::cout<<avalia()<<'\n';
 }
 
-robo robo::transa(robo& r, int legacy){
+robo robo::transa(robo& r, int legacy){ //legacy esta aqui para "legacy support", ele nao faz nada nesse caso
     robo filho(r);
     filho.mutacao();
     return filho;
@@ -106,6 +103,6 @@ void robo::animate(){
         if(k<gene.size())gene[k].debug(' ');
         else end.debug(' ');
         printf("%d\n",path.size());
-        wait(0.01);
+        wait(50000000);
     }
 }

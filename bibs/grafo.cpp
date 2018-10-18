@@ -248,6 +248,6 @@ void grafo::unlock(coord key){
 
 void grafo::reset(){
     for(int i=0;i<doors.size();i++){
-        m.unlock(doors[i]);
+        m.lock(doors[i]);
     }
 }

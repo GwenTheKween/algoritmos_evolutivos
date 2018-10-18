@@ -164,6 +164,14 @@ public:
         return path;
     }
 
+    void lock(coord pos){
+        int dir = (*this)[pos].get_lock_dir();
+        if((*this)[pos].connected(dir)){
+            (*this)[pos].unlock();
+            (*this)[pos.move(dir)].add_dir(dir^((dir<LEFT)?(DOWN|UP):(LEFT|RIGHT)));
+        }
+    }
+
     void unlock(coord pos){
         int dir;
         dir=(*this)[pos].get_lock_dir();
