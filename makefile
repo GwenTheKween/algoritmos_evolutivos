@@ -14,7 +14,8 @@ test: $(CFILES) $(BIBS)
 run: test
 	./$(NOME) -t e -s -v -n 200 -m 100 > $(DATA_FILE)e
 	./$(NOME) -t t -s -v -n 200 -m 100 > $(DATA_FILE)t
-	./plot.py 0-2 $(DATA_FILE)e $(DATA_FILE)t
+	./$(NOME) -t r -s -v -n 200 -m 100 > $(DATA_FILE)r
+	./plot.py 0-2 $(DATA_FILE)e $(DATA_FILE)t $(DATA_FILE)r
 
 clear:
 	rm $(OFILES) $(NOME)

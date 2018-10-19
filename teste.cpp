@@ -7,7 +7,7 @@ int main(int argc, char** argv){
 	int processed[SIZE_ARGV];
 	proc_argv(argc,argv,processed);
 	if(processed[HELP]){
-		print_help(argv);
+		print_help(argv[0]);
 	}else{
 		for(int i=0;i<5;i++){
 			n.set(rand()%1200 - 100); //vai de -100 a 1100
