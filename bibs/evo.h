@@ -1,6 +1,5 @@
 #ifndef EVOLUTIVO
 #define EVOLUTIVO
-#include "numero.h"
 #include <vector>
 #include <stdlib.h>
 

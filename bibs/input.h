@@ -1,6 +1,7 @@
 #ifndef INPUT_PROCESSING
 #define INPUT_PROCESSING
 #include <string>
+#include <iostream>
 #include "evo.h"
 
 

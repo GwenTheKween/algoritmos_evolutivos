@@ -1,15 +1,23 @@
 COMP = g++
-COMPFLAGS = -O3 -std=c++11 -g
+COMPFLAGS = -c -O3 -std=c++11 -g
 LINKFLAGS = -o
 NOME = test
-CFILES = teste.cpp
+CFILES = main.cpp bibs/grafo.cpp bibs/robot.cpp
+OFILES = $(CFILES:.cpp=.o)
 BIBS = $(wildcard bibs/*.h)
 DATA_FILE = dados\_
 
 all: test
 
-test: $(CFILES) $(BIBS)
-	$(COMP) $(CFILES) $(COMPFLAGS) $(LINKFLAGS) $(NOME)
+test: $(OFILES) $(BIBS)
+	$(COMP) $(OFILES) $(LINKFLAGS) $(NOME)
+
+main.o:main.cpp $(BIBS)
+	$(COMP) $< $(COMPFLAGS) -o $@
+
+%.o:%.cpp %.h
+	$(COMP) $< $(COMPFLAGS) -o $@
+
 
 run: test
 	./$(NOME) -t e -s -v -n 200 -m 100 > $(DATA_FILE)e
