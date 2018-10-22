@@ -35,6 +35,7 @@ public:
     void gen_map(int = 5);
     void generate_loops(int);
     void draw(); //parte do aulos, usando ncurses.
+    void animate(coord&);
     void debug();
 
     //calculates the minimun distance between 2 points

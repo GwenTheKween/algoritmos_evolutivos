@@ -166,6 +166,40 @@ void grafo::draw(){
     return;
 }
 
+void grafo::animate(coord& player){
+    //prints the map using a 3x3 space, very ugly, just for debug sake
+    coord p;
+    char body[]={'.','*','^','v','<','>','@'};
+    int b;
+    for(int i=0;i<m.h();i++){
+        for(int j=0;j<m.w();j++){
+            p.set(i,j);
+            printf(" %c ",(m[p].up())?'.':' ');
+        }
+        printf("\n");
+        for(int j=0;j<m.w();j++){
+            p.set(i,j);
+            b=0;
+            for(int k=0;k<keys.size() && b==0;k++)   b=(p==keys[k]);
+            for(int k=0;k<doors.size() && b==0 ;k++){
+                if(p==doors[k]){
+                    int lock_dir=m[p].get_lock_dir();
+                    b=2*(lock_dir==UP)+3*(lock_dir==DOWN)+4*(lock_dir==LEFT)+5*(lock_dir==RIGHT);
+                }
+            }
+            if(p==player) b=6;
+            printf("%c%c%c",(m[p].left())?'.':' ',body[b],(m[p].right())?'.':' ');
+        }
+        printf("\n");
+        for(int j=0;j<m.w();j++){
+            p.set(i,j);
+            printf(" %c ",(m[p].down())?'.':' ');
+        }
+        printf("\n");
+    }
+    return;
+}
+
 void grafo::debug(){ //prints the map as a  bitmap of directions, pretty tough to read, but good for debugging
     tile t;
     coord p;
@@ -214,6 +248,6 @@ void grafo::unlock(coord key){
 
 void grafo::reset(){
     for(int i=0;i<doors.size();i++){
-        m.unlock(doors[i]);
+        m.lock(doors[i]);
     }
 }

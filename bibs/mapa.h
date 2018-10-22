@@ -22,8 +22,12 @@ public:
         }
     }
     map(const map& m){ //copy constructor -.-'
-        std::cout<<1<<'\n';
         coord c;
+        height = m.height;
+        width = m.width;
+        t=new tile*[height];
+        t[0] = new tile[height*width];
+        for(int i=1;i<height;i++) t[i]=t[i-1]+width;
         for(int i=0;i<height;i++){
             for(int j=0;j<width;j++){
                 t[i][j]=m.t[i][j];
@@ -31,7 +35,6 @@ public:
         }
     }
     map(map&& m){ //move constructor
-        std::cout<<2<<'\n';
         height = m.height;
         width = m.width;
         delete[] t[0];
@@ -43,7 +46,6 @@ public:
         width(model.w())
     {
         int i,j;
-        std::cout<<3<<'\n';
         t=new tile*[height];
         t[0]=new tile[height*width];
         for(j=0;j<width;j++) t[0][j]=model.t[0][j];
@@ -160,6 +162,14 @@ public:
         //path is reversed, must change it back
         std::reverse(path.begin(),path.end());
         return path;
+    }
+
+    void lock(coord pos){
+        int dir = (*this)[pos].get_lock_dir();
+        if((*this)[pos].connected(dir)){
+            (*this)[pos].unlock();
+            (*this)[pos.move(dir)].add_dir(dir^((dir<LEFT)?(DOWN|UP):(LEFT|RIGHT)));
+        }
     }
 
     void unlock(coord pos){
