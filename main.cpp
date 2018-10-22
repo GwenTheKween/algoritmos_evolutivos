@@ -34,7 +34,7 @@ int main(int argc, char** argv){
         }
         for(int i=0;i<IND_AMNT;i++){
             robo r(g);
-            init.push_back(g);
+            init.push_back(r);
         }
         evolutivo<robo> e(init,processed[TIPO_TRANSA],processed[COND_FIM]);
         e.itera(processed[GEN_AMNT],processed[VERBOSE]);
