@@ -17,6 +17,7 @@ public:
     int avalia();
     void debug();
 
+    robo random();
     robo transa(robo&,int);
     void mutacao();
     void animate();

@@ -13,11 +13,7 @@ robo::robo(const robo& parent):
 
 robo::robo(grafo& model):
     g(model){
-        //coordenadas das chaves presentes no mapa
-    std::vector<coord> keys=g.get_keys();
-    //escolhe uma ordem aleatoria para coletar essas chaves
-    std::random_shuffle(keys.begin(),keys.end());
-    gene=keys;
+        random();
 }
 
 void robo::simulate(){
@@ -61,6 +57,13 @@ void robo::debug(){
     }
     printf("\n");
     std::cout<<avalia()<<'\n';
+}
+
+robo robo::random(){
+        //coordenadas das chaves presentes no mapa
+    gene = g.get_keys();
+    //escolhe uma ordem aleatoria para coletar essas chaves
+    std::random_shuffle(gene.begin(),gene.end());
 }
 
 robo robo::transa(robo& r, int legacy){ //legacy esta aqui para "legacy support", ele nao faz nada nesse caso
