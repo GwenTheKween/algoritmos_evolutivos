@@ -1,7 +1,7 @@
 #include "robot.h"
 
-void wait(int delay){
-    while(delay>0) delay--;
+void wait(int ms){
+    usleep(ms*1000);
 }
 
 robo::robo(const robo& parent):
@@ -103,6 +103,6 @@ void robo::animate(){
         if(k<gene.size())gene[k].debug(' ');
         else end.debug(' ');
         printf("%d\n",path.size());
-        wait(50000000);
+        wait(100);
     }
 }

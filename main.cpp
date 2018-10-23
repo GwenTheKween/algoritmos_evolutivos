@@ -1,5 +1,6 @@
 #include "bibs/input.h"
 #include "bibs/robot.h"
+#include <time.h>
 
 #define IND_AMNT 4
 #define RAND_MAP 1
@@ -19,6 +20,7 @@ void menu(int* proc){
 int main(int argc, char** argv){
     int processed[SIZE_ARGV];
     std::vector<robo> init;
+    srand(time(NULL));
     if(argc>1){
         proc_argv(argc,argv,processed);
     }else{
@@ -38,6 +40,8 @@ int main(int argc, char** argv){
         }
         evolutivo<robo> e(init,processed[TIPO_TRANSA],processed[COND_FIM]);
         e.itera(processed[GEN_AMNT],processed[VERBOSE]);
+        robo r(e.get_best());
+        r.animate();
     }
     return 0;
 }

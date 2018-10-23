@@ -2,6 +2,7 @@
 #define ROBOTSdotTXT
 
 #include "grafo.h"
+#include <unistd.h>
 
 class robo{
 private:
