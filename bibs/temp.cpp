@@ -6,7 +6,7 @@
 #include <time.h>
 
 int main(int argc,char** argv){
-    grafo g(10);
+    map g(10);
     int processed[SIZE_ARGV];
     std::vector<robo> ind;
     proc_argv(argc,argv,processed);

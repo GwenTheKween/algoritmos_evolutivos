@@ -11,7 +11,7 @@ robo::robo(const robo& parent):
         g.reset();//assume que o mapa ja foi simulado
     }
 
-robo::robo(grafo& model):
+robo::robo(map& model):
     g(model){
         //coordenadas das chaves presentes no mapa
     std::vector<coord> keys=g.get_keys();
