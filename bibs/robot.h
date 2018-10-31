@@ -1,20 +1,21 @@
 #ifndef ROBOTSdotTXT
 #define ROBOTSdotTXT
 
-#include "grafo.h"
+#include "mapa.h"
+#include <unistd.h>
+#include <iostream>
 
 class robo{
 private:
-    grafo g;
     std::vector<coord> gene;
     std::vector<coord> path;
 public:
     robo(const robo&);
-    robo(grafo&);
+    robo(map&);
     ~robo(){}
 
-    void simulate();
-    int avalia();
+    void simulate(map&);
+    int avalia(map&);
     void debug();
 
     robo random();

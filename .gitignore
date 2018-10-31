@@ -6,7 +6,7 @@
 /bibs/*.swp
 /*.swp
 /a.out
-/bibs/evo.o
+/bibs/*.o
 /test
 /teste.o
 /dados
@@ -24,3 +24,6 @@
 /dados_r_grafico.png
 bibs/temp
 bibs/makefile
+/*.o
+.ycm_extra_conf.py
+bibs/prog

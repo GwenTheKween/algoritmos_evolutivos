@@ -54,6 +54,7 @@ public:
         else if(dir == DOWN) return coord(X+1,Y);
         else if(dir == LEFT) return coord(X,Y-1);
         else if(dir == RIGHT) return coord(X,Y+1);
+		return coord(-1,-1);
     }
 
     void debug(char c){
