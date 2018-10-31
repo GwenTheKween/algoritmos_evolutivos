@@ -3,6 +3,7 @@
 
 #include "mapa.h"
 #include <unistd.h>
+#include <iostream>
 
 class robo{
 private:

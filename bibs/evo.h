@@ -53,7 +53,7 @@ template<class type> evolutivo<type>::evolutivo(std::vector<type> v,int tipo_tra
     end_cond(cond_end),
     stable_count(0)
 	{
-	int i;
+	unsigned int i;
 	for(i=0;i<v.size();i++){
 		notas[i]=v[i].avalia(); //calculates all the scores from the start.
 	}
@@ -62,7 +62,7 @@ template<class type> evolutivo<type>::evolutivo(std::vector<type> v,int tipo_tra
 //returns the best fitted individuals
 template<class type>type evolutivo<type>::get_best(){
 	double best=0;
-	for(int i=1;i<notas.size();i++){
+	for(unsigned int i=1;i<notas.size();i++){
 		if(notas[best]<notas[i]) best=i;
 	}
 	return individuo[best];
@@ -76,7 +76,7 @@ template<class type>void evolutivo<type>::itera(int n,bool verbose){
     //      through all generations         enough generations
 	while((gen<n && end_cond==FIXED) || (stable_count<n && end_cond==STABLE)){
         double mx=notas[0],sum=notas[0],new_mx;
-        for(int i=1;i<notas.size();i++){
+        for(unsigned int i=1;i<notas.size();i++){
             if(mx<notas[i])mx=notas[i]; //finds the best evaluation of the generation
             sum+=notas[i];
         }
@@ -93,7 +93,7 @@ template<class type>void evolutivo<type>::itera(int n,bool verbose){
         //finds the new best evaluation. Should it be the same as last, the generations have stabilized.
         notas[0]=individuo[0].avalia();
         new_mx=notas[0];
-		for(int i=1;i<individuo.size();i++){
+		for(unsigned int i=1;i<individuo.size();i++){
 			notas[i]=individuo[i].avalia();
             if(new_mx<notas[i]) new_mx=notas[i];
         }
@@ -108,13 +108,13 @@ template<class type>void evolutivo<type>::itera(int n,bool verbose){
 
 template<class type> std::vector<type> evolutivo<type>::transa_por_elitismo(){
 	//calcula qual eh o melhor individuo
-	int best=0;
+	unsigned int best=0;
 	std::vector<type> nova_geracao;
-	for(int i=1;i<notas.size();i++){
+	for(unsigned int i=1;i<notas.size();i++){
 		if(notas[best]<notas[i]) best=i;
 	}
 	//faz ele transar com todo mundo e avalia os filhos
-	for(int i=0;i<individuo.size();i++){
+	for(unsigned int i=0;i<individuo.size();i++){
 		if(i!=best){
 			nova_geracao.push_back(individuo[i].transa(individuo[best],range));
 		}else{
@@ -131,15 +131,15 @@ template<class type> std::vector<type> evolutivo<type>::transa_por_roleta(){
 	//negs indica quanto a resposta tem que ser shiftada para abaixo de 0
 	double sum=0,negs=notas[0];
 	std::vector<type> nova_geracao;
-	for (int i = 0; i < notas.size(); i++) {
+	for (unsigned int i = 0; i < notas.size(); i++) {
 		if (notas[i] < negs) negs = notas[i];
 	}
-	for (int i = 0; i < notas.size(); i++) {
+	for (unsigned int i = 0; i < notas.size(); i++) {
         notas[i]-=negs;
 		sum += notas[i];
 	}
 		
-	for (int k = 0; k < individuo.size(); k++) {
+	for (unsigned int k = 0; k < individuo.size(); k++) {
 		//gera dois numeros aleatorios, uniformemente distribuido, entre [0,sum)
 		double pai = rand(), mae = rand();
 		pai /= RAND_MAX;
@@ -171,14 +171,14 @@ template<class type> std::vector<type> evolutivo<type>::transa_por_roleta(){
 
 template<class type> std::vector<type> evolutivo<type>::transa_por_torneio(int n){
 	std::vector<type> nova_geracao;
-	int pai,mae,challenger,best=0;
+	unsigned int pai,mae,challenger,best=0;
 	//encontra o melhor de todos, para nao matar ele sem querer
-	for(int k=0;k<notas.size();k++){
+	for(unsigned int k=0;k<notas.size();k++){
 		if(notas[k]>notas[best]){
 			best=k;
 		}
 	}
-	for(int k=0;k<individuo.size();k++){
+	for(unsigned int k=0;k<individuo.size();k++){
 		if(k==best){
 			nova_geracao.push_back(individuo[k]); //melhor de todos simplesmente passa para proxima geracao
 			continue;

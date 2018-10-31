@@ -26,3 +26,4 @@ bibs/temp
 bibs/makefile
 /*.o
 .ycm_extra_conf.py
+bibs/prog

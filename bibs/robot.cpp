@@ -21,7 +21,7 @@ robo::robo(map& model):
 }
 
 void robo::simulate(){
-    int i;
+    unsigned int i;
     std::vector<coord> leg; //a path is comprised of many legs (in portuguese, at least, an when talking about flights)
     coord start(0,0);
     path.push_back(start);
@@ -43,13 +43,13 @@ int robo::avalia(){
 }
 
 void robo::debug(){
-    int k=0;
+    unsigned int k=0;
     g.draw();
-    for(int i=0;i<gene.size();i++){
+    for(unsigned int i=0;i<gene.size();i++){
         gene[i].debug('\t');
     }
     printf("\n");
-    for(int i=0;i<path.size();i++){
+    for(unsigned int i=0;i<path.size();i++){
         path[i].debug(' ');
         if(path[i]==gene[k] && k<gene.size()){
             printf("\n");
@@ -89,11 +89,11 @@ void robo::mutacao(){
 }
 
 void robo::animate(){
-    int k=0;
+    unsigned int k=0;
     coord end(0,0);
     simulate();
     g.reset();
-    for(int i=0;i<path.size();i++){
+    for(unsigned int i=0;i<path.size();i++){
         system("clear");
         g.animate(path[i]);
         if(k<gene.size() && path[i] == gene[k]){
@@ -102,7 +102,7 @@ void robo::animate(){
         }
         if(k<gene.size())gene[k].debug(' ');
         else end.debug(' ');
-        printf("%d\n",path.size());
+        printf("%lu\n",path.size());
         wait(100);
     }
 }
