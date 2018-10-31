@@ -54,8 +54,8 @@ template<class type> evolutivo<type>::evolutivo(std::vector<type> v,int tipo_tra
     stable_count(0)
 	{
 	unsigned int i;
-	for(i=0;i<v.size();i++){
-		notas[i]=v[i].avalia(); //calculates all the scores from the start.
+	for(i=0;i<individuo.size();i++){
+		notas[i]=individuo[i].avalia(); //calculates all the scores from the start.
 	}
 }
 

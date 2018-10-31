@@ -8,7 +8,7 @@
 int main(int argc,char** argv){
     map g(10);
     int processed[SIZE_ARGV];
-    std::vector<robo> ind;
+    std::vector<runner> ind;
     proc_argv(argc,argv,processed);
 	srand(time(NULL));
     if(processed[HELP]){
@@ -16,10 +16,10 @@ int main(int argc,char** argv){
     }else{
         g.gen_map(10);
         for(int i=0;i<4;i++){
-            robo r(g);
+            runner r(g);
             ind.push_back(r);
         }
-        evolutivo<robo> e(ind,processed[TIPO_TRANSA],processed[COND_FIM]);
+        evolutivo<runner> e(ind,processed[TIPO_TRANSA],processed[COND_FIM]);
         e.itera(processed[GEN_AMNT],processed[VERBOSE]);
         robo r2(e.get_best());
 //        r2.animate();

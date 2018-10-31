@@ -14,6 +14,12 @@ public:
     robo(map&);
     ~robo(){}
 
+	std::vector<coord> get_gene(){return gene;}
+	std::vector<coord> get_path(){return path;}
+
+	void set_gene(std::vector<coord> g){gene = g;}
+	void set_path(std::vector<coord> p){path = p;}
+
     void simulate(map&);
     int avalia(map&);
     void debug();
@@ -21,7 +27,7 @@ public:
     robo random();
     robo transa(robo&,int);
     void mutacao();
-    void animate();
+    void animate(map&);
 };
 
 #endif

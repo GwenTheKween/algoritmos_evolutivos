@@ -56,14 +56,24 @@ map::map(map& model):
 
 
 map& map::operator =(const map& other){
-	for(int i=0;i<height;i++){
-		for(int j=0;j<width;j++){
-			t[i][j]=other.t[i][j];
+	if(this != &other){
+		delete[] t[0];
+		delete[] t;
+		t = new tile*[other.height];
+		t[0] = new tile[other.height*other.width];
+		height = other.height;
+		width = other.width;
+		for(int j=0;j<width;j++) t[0][j] = other.t[0][j];
+		for(int i=1;i<height;i++){
+			t[i] = t[i-1] + width;
+			for(int j=0;j<width;j++){
+				t[i][j]=other.t[i][j];
+			}
 		}
+		keys = other.keys;
+		doors = other.doors;
+		return (*this);
 	}
-	keys = other.keys;
-	doors = other.doors;
-	return (*this);
 }
 
 map& map::operator =(map&& m){
@@ -167,9 +177,9 @@ void map::unlock(coord key){
 		}
 	}
 	if(i==keys.size()) return; //invalid key
-	dir=(*this)[key].get_lock_dir();
-	(*this)[key].unlock();
-	(*this)[key.move(dir)].add_dir(dir^((dir<LEFT)?(DOWN|UP):(LEFT|RIGHT)));
+	dir=(*this)[door].get_lock_dir();
+	(*this)[door].unlock();
+	(*this)[door.move(dir)].add_dir(dir^((dir<LEFT)?(DOWN|UP):(LEFT|RIGHT)));
 }
 
 void map::reset(){
@@ -212,7 +222,7 @@ void map::generate_loops(int n){
 		if(dirs.size()==0){ //no possible directions to open
 			i--;
 			//a new door has to be chosen, otherwise this turns into an infinite loop
-			door.set(rand()%h(), rand()%w());
+			//door.set(rand()%h(), rand()%w());
 			continue;
 		}
 
@@ -231,7 +241,7 @@ void map::generate_loops(int n){
 		//chooses a new direction to connect and turns the tile into a door
 		new_dir=rand()%dirs.size();
 		new_dir=dirs[new_dir];
-		lock(new_dir);
+		(*this)[door].lock(new_dir);
 
 		doors.push_back(door);
 		keys.push_back(key);

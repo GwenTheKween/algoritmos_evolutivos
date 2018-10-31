@@ -47,7 +47,6 @@ void robo::debug(){
 
 robo robo::random(){
         //coordenadas das chaves presentes no mapa
-    gene = g.get_keys();
     //escolhe uma ordem aleatoria para coletar essas chaves
     std::random_shuffle(gene.begin(),gene.end());
 }
@@ -77,16 +76,18 @@ void robo::mutacao(){
     path.clear();
 }
 
-void robo::animate(){
+void robo::animate(map& m){
     unsigned int k=0;
     coord end(0,0);
     for(unsigned int i=0;i<path.size();i++){
         system("clear");
+		m.animate(path[i]);
         if(k<gene.size() && path[i] == gene[k]){
             k++;
+			i--;
         }
-        if(k<gene.size())gene[k].debug(' ');
-        else end.debug(' ');
+//        if(k<gene.size())gene[k].debug(' ');
+//        else end.debug(' ');
         printf("%lu\n",path.size());
         wait(100);
     }
