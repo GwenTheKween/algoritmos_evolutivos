@@ -7,7 +7,6 @@
 
 class robo{
 private:
-    map g;
     std::vector<coord> gene;
     std::vector<coord> path;
 public:
@@ -15,8 +14,8 @@ public:
     robo(map&);
     ~robo(){}
 
-    void simulate();
-    int avalia();
+    void simulate(map&);
+    int avalia(map&);
     void debug();
 
     robo transa(robo&,int);

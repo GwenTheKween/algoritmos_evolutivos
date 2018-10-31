@@ -1,6 +1,6 @@
 //ESSE ARQUIVO EH TEMPORARIO, SO PARA TESTAR SE A CLASSE GRAFO ESTA FUNCIONANDO
 
-#include "robot.h"
+#include "runner.h"
 #include "input.h"
 #include "evo.h"
 #include <time.h>
