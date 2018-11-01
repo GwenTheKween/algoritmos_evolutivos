@@ -24,7 +24,7 @@ public:
     int avalia(map&);
     void debug();
 
-    robo random();
+    void random();
     robo transa(robo&,int);
     void mutacao();
     void animate(map&);

@@ -38,14 +38,13 @@ int robo::avalia(map& m){
 }
 
 void robo::debug(){
-    unsigned int k=0;
     for(unsigned int i=0;i<gene.size();i++){
         gene[i].debug('\t');
     }
     printf("\n");
 }
 
-robo robo::random(){
+void robo::random(){
         //coordenadas das chaves presentes no mapa
     //escolhe uma ordem aleatoria para coletar essas chaves
     std::random_shuffle(gene.begin(),gene.end());

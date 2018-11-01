@@ -1,85 +1,44 @@
 #include "mapa.h"
 
-map::map(int h,int w):
-	height(h),
-	width((w>0)?w:h)
-	{
-	t=new tile*[height];
-	t[0]=new tile[height*width];
-	for(int i=1;i<height;i++){
-		t[i]=t[i-1]+width;
-	}
-}
+map::map(const map& m):
+	height(m.height),
+	width(m.width),
+	t(m.t),
+	doors( m.doors),
+	keys(m.keys)
+	{}
 
-map::map(const map& m){
-	coord c;
-	height = m.height;
-	width = m.width;
-	t=new tile*[height];
-	t[0] = new tile[height*width];
-	for(int i=1;i<height;i++) t[i]=t[i-1]+width;
-	for(int i=0;i<height;i++){
-		for(int j=0;j<width;j++){
-			t[i][j]=m.t[i][j];
-		}
-	}
-	doors = m.doors;
-	keys = m.keys;
-}
-
-map::map(map&& m){
-	height = m.height;
-	width = m.width;
-	delete[] t[0];
-	delete[] t;
-	t=m.t;
-	doors = m.doors;
-	keys = m.keys;
-}
+map::map(map&& m):
+	height(m.height),
+	width(m.width),
+	t(m.t),
+	doors(m.doors),
+	keys(m.keys)
+	{}
 
 map::map(map& model):
 	height(model.h()),
-	width(model.w())
-{
-	int i,j;
-	t=new tile*[height];
-	t[0]=new tile[height*width];
-	for(j=0;j<width;j++) t[0][j]=model.t[0][j];
-	for(i=1;i<height;i++){
-		t[i]=t[i-1]+width;
-		for(j=0;j<width;j++) t[i][j]=model.t[i][j];
-	}
-	doors = model.doors;
-	keys = model.keys;
-}
+	width(model.w()),
+	t(model.t),
+	doors(model.doors),
+	keys(model.keys)
+	{}
 
 
 
 map& map::operator =(const map& other){
 	if(this != &other){
-		delete[] t[0];
-		delete[] t;
-		t = new tile*[other.height];
-		t[0] = new tile[other.height*other.width];
+		t = other.t;
 		height = other.height;
 		width = other.width;
-		for(int j=0;j<width;j++) t[0][j] = other.t[0][j];
-		for(int i=1;i<height;i++){
-			t[i] = t[i-1] + width;
-			for(int j=0;j<width;j++){
-				t[i][j]=other.t[i][j];
-			}
-		}
 		keys = other.keys;
 		doors = other.doors;
-		return (*this);
 	}
+	return (*this);
 }
 
 map& map::operator =(map&& m){
 	if(this != &m){
-		delete[] t[0];
-		delete[] t;
 		t=m.t;
 		height=m.height;
 		width=m.width;

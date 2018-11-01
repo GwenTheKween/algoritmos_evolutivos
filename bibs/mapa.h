@@ -10,20 +10,20 @@
 
 class map{
 private:
-    tile** t;
     int height, width;
+	std::vector<std::vector<tile> > t;
 	std::vector<coord> doors;
 	std::vector<coord> keys;
 public:
 	//constructors, all of them!!
-    map(int =0,int =-1);
+    map(int h=0,int w=-1):height(h),width((w>0)?w:h),t(height,std::vector<tile>(width)),doors(0),keys(0){}
     map(const map& m); //copy constructor
     map(map&& m); //move constructor
     map(map& model);
 	//destructor
     ~map(){
-        delete[] t[0];
-        delete[] t;
+		for(unsigned int i=0;i<t.size();i++) t[i].clear();
+		t.clear();
     }
 
 	//get parameters from the object
@@ -33,7 +33,7 @@ public:
 	std::vector<coord> get_doors(){return keys;}
 
 	//operator overrides
-    tile& operator [](coord P)const { return t[P.x()][P.y()];}
+    tile operator [](coord P)const { return t[P.x()][P.y()];}
     map& operator =(const map& other); //copy operator
     map& operator = (map&& m);//move operator
 
@@ -44,23 +44,18 @@ public:
     //return the smallest path from p1 to p2 EXCLUDING P1
     std::vector<coord> BFS(coord p1,coord p2);
 	std::vector<coord> BFS(int p1x,int p1y, int p2x, int p2y);
-
+	//lock door again, after it's been open
     void lock(coord);
-
+	//open door
     void unlock(coord);
-	
+	//lock all doors again
 	void reset();
-
+	//generate a map, by running a DFS, generating loops and adding doors
 	void gen_map(int);
-
 	void generate_loops(int);
-
 	void DFS(coord);
-
-	void draw(){
-		animate(coord(-1,-1));
-	}
-
+	//pretty draw of the map
+	void draw() {animate(coord(-1,-1));}
 	void animate(coord);
 };
 
