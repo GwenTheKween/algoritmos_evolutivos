@@ -200,8 +200,8 @@ void map::generate_loops(int n){
 		//chooses a new direction to connect and turns the tile into a door
 		new_dir=rand()%dirs.size();
 		new_dir=dirs[new_dir];
-		(*this)[door].lock(new_dir);
-
+		t[door.x()][door.y()].lock(new_dir);
+		
 		doors.push_back(door);
 		keys.push_back(key);
 
