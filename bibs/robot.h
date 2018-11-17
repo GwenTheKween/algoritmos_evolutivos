@@ -9,6 +9,7 @@ class robo{
 private:
     std::vector<coord> gene;
     std::vector<coord> path;
+    table t;
 public:
     robo(const robo&);
     robo(map&);
@@ -23,6 +24,7 @@ public:
     void simulate(map&);
     int avalia(map&);
     void debug();
+    int decision(char);
 
     void random();
     robo transa(robo&,int);

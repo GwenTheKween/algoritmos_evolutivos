@@ -21,10 +21,10 @@ int main(int argc,char** argv){
         }
         evolutivo<runner> e(ind,processed[TIPO_TRANSA],processed[COND_FIM]);
         e.itera(processed[GEN_AMNT],processed[VERBOSE]);
-        robo r2(e.get_best());
-//        r2.animate();
-        e.itera(processed[GEN_AMNT]*10,processed[VERBOSE]);
-        robo d2(e.get_best());
+        runner r2(e.get_best());
+        r2.animate();
+        //e.itera(processed[GEN_AMNT]*10,processed[VERBOSE]);
+        //robo d2(e.get_best());
 //        d2.animate();
     }
     return 0;

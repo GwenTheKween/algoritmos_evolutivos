@@ -1,10 +1,10 @@
 #include "robot.h"
 
 void wait(int ms){
-    usleep(ms*1000);
+    usleep(ms*100);
 }
 
-robo::robo(const robo& parent):gene(parent.gene){}
+robo::robo(const robo& parent):gene(parent.gene),path(parent.path),t(parent.t){}
 
 robo::robo(map& model){
         //coordenadas das chaves presentes no mapa
@@ -12,6 +12,7 @@ robo::robo(map& model){
     //escolhe uma ordem aleatoria para coletar essas chaves
     std::random_shuffle(keys.begin(),keys.end());
 	gene=keys;
+	gene.push_back(coord(0,0));
 }
 
 void robo::simulate(map& m){
@@ -28,8 +29,8 @@ void robo::simulate(map& m){
         path.insert(path.end(),leg.begin(),leg.end());
         m.unlock(gene[i]);
     }
-    leg=m.BFS(gene[i-1],start);
-    path.insert(path.end(),leg.begin(),leg.end());
+//    leg=m.BFS(gene[i-1],start);
+//    path.insert(path.end(),leg.begin(),leg.end());
 }
 
 int robo::avalia(map& m){
@@ -42,6 +43,10 @@ void robo::debug(){
         gene[i].debug('\t');
     }
     printf("\n");
+}
+
+int robo::decision(char obs){
+	return t[obs];
 }
 
 void robo::random(){

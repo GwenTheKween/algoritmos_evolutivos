@@ -96,7 +96,7 @@ int map::look_around(coord pos){
 		looking = looking.move(LEFT);
 		curr = (*this)[looking];
 	}
-	looking = looking.move(LEFT);
+	looking = pos;
 	curr = (*this)[looking];
 	//last: right
 	while(curr.connected(RIGHT)){
@@ -107,6 +107,7 @@ int map::look_around(coord pos){
 		looking = looking.move(RIGHT);
 		curr=(*this)[looking];
 	}
+	return ret;
 }
 
 std::vector<coord> map::BFS(coord p1,coord p2){

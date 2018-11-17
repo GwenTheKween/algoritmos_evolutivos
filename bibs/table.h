@@ -20,8 +20,8 @@ enum direction{
 
 enum visible{ 
 	//to be used as (MINOTAUR & NORTH) | (BIFURCATION & SOUTH)
-	MINOTAUR = 0x5555,
-	BIFURCATION = 0xaaaa,
+	MINOTAUR = 0x55,
+	BIFURCATION = 0xaa,
 };
 
 class table{
@@ -38,4 +38,5 @@ public:
 
 	table operator = (const table& other);
 	table operator = (table&& other);
+	char operator[] (int val) const {return reaction[val];}
 };
