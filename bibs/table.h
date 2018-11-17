@@ -20,8 +20,8 @@ enum direction{
 
 enum visible{ 
 	//to be used as (MINOTAUR & NORTH) | (BIFURCATION & SOUTH)
-	MINOTAUR = 0b01010101,
-	BIFURCATION = 0b10101010,
+	MINOTAUR = 0x5555,
+	BIFURCATION = 0xaaaa,
 };
 
 class table{

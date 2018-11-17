@@ -60,6 +60,55 @@ void map::connect(char dir, coord c){
 	t[c.x()][c.y()].add_dir((dir<=DOWN)?(dir^(DOWN|UP)):(dir^(LEFT|RIGHT)));
 }
 
+int map::look_around(coord pos){
+	int i,ret=0;
+	coord looking(pos);
+	tile curr = (*this)[looking];
+	//checks all the directions
+	//first: up
+	while(curr.connected(UP)){
+		ret|=(//if current tile has a sideways conection
+			(curr.connected(LEFT) || curr.connected(RIGHT))
+			//then you can move up to find a bifurcation
+			&(BIFURCATION & NORTH));
+		looking = looking.move(UP);
+		curr = (*this)[looking];
+	}
+	looking = pos;
+	curr = (*this)[looking];
+	//second: down
+	while(curr.connected(DOWN)){
+		ret|=(//if current tile has a sideways conection
+			(curr.connected(LEFT) || curr.connected(RIGHT))
+			//then you can move down to find a bifurcation
+			&(BIFURCATION & SOUTH));
+		looking = looking.move(DOWN);
+		curr = (*this)[looking];
+	}
+	looking = pos;
+	curr = (*this)[looking];
+	//third: left
+	while(curr.connected(LEFT)){
+		ret|=(//if current tile has a vertical conection
+			(curr.connected(UP) || curr.connected(DOWN))
+			//then you can move left to find a bifurcation
+			&(BIFURCATION & EAST));
+		looking = looking.move(LEFT);
+		curr = (*this)[looking];
+	}
+	looking = looking.move(LEFT);
+	curr = (*this)[looking];
+	//last: right
+	while(curr.connected(RIGHT)){
+		ret|=(//if current tile has an vertical conection
+			(curr.connected(UP) || curr.connected(DOWN))
+			//then you can move right to find a bifurcation
+			&(BIFURCATION & WEST));
+		looking = looking.move(RIGHT);
+		curr=(*this)[looking];
+	}
+}
+
 std::vector<coord> map::BFS(coord p1,coord p2){
 	std::queue<coord> q;
 	std::vector<coord> path;
@@ -200,7 +249,7 @@ void map::generate_loops(int n){
 		//chooses a new direction to connect and turns the tile into a door
 		new_dir=rand()%dirs.size();
 		new_dir=dirs[new_dir];
-		(*this)[door].lock(new_dir);
+		t[door.x()][door.y()].lock(new_dir);
 
 		doors.push_back(door);
 		keys.push_back(key);

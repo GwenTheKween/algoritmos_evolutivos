@@ -3,6 +3,7 @@
 #define MAPA_HEADER
 
 #include "tile.h"
+#include "table.h"
 #include <queue>
 #include <algorithm>
 #include <vector>
@@ -40,6 +41,7 @@ public:
 
     bool can_move(coord,int);
     void connect(char, coord);
+    int look_around(coord);
 
     //return the smallest path from p1 to p2 EXCLUDING P1
     std::vector<coord> BFS(coord p1,coord p2);
