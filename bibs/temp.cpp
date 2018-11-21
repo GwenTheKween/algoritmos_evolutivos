@@ -15,14 +15,14 @@ int main(int argc,char** argv){
         print_help(argv[0]);
     }else{
         g.gen_map(10);
-        for(int i=0;i<4;i++){
+        for(int i=0;i<400;i++){
             runner r(g);
             ind.push_back(r);
         }
         evolutivo<runner> e(ind,processed[TIPO_TRANSA],processed[COND_FIM]);
-        e.itera(processed[GEN_AMNT],processed[VERBOSE]);
-        runner r2(e.get_best());
-        r2.animate();
+	e.itera(processed[GEN_AMNT],processed[VERBOSE]);
+	runner r2(e.get_best());
+	r2.animate();
         //e.itera(processed[GEN_AMNT]*10,processed[VERBOSE]);
         //robo d2(e.get_best());
 //        d2.animate();

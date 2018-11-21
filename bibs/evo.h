@@ -196,7 +196,7 @@ template<class type> std::vector<type> evolutivo<type>::transa_por_torneio(int n
 			challenger=rand()%individuo.size();
 			if(notas[challenger]>notas[mae])mae=challenger;
 		}
-		nova_geracao.push_back(individuo[pai].transa(individuo[mae],range));
+		nova_geracao.push_back(individuo[pai].transa(individuo[mae],range*stable_count));
 	}
 	return nova_geracao;
 }

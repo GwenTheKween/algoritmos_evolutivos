@@ -35,6 +35,7 @@ public:
 	void gen_random();
 	table cross_over(table&);
 	void debug();
+	void set_entry(int entry,int new_val){reaction[entry] = new_val;}
 
 	table operator = (const table& other);
 	table operator = (table&& other);

@@ -37,18 +37,20 @@ int runner::avalia(){
 	char observed;
 	std::vector<coord> pth;
 	pth.push_back(position);
+	//get_gene()[0].debug();
 	while(score < 1000){
 		score++;
 		observed = m.look_around(position);
 		movement = decision(observed);
+		//printf("%d\t",movement);
 		if(movement == MATCH_X){
 			if(position.x() > get_gene()[keys_acquired].x()){
-				if(!m.can_move(position,RIGHT))
+				if(!m[position].connected(RIGHT))
 					movement = MATCH_Y;
 				else
 					position = position.move(RIGHT);
 			}else{
-				if(!m.can_move(position,LEFT))
+				if(!m[position].connected(LEFT))
 					movement = MATCH_Y;
 				else
 					position = position.move(LEFT);
@@ -56,17 +58,18 @@ int runner::avalia(){
 		}
 		if(movement == MATCH_Y){
 			if(position.y() > get_gene()[keys_acquired].y()){
-				if(!m.can_move(position,UP))
+				if(!m[position].connected(UP))
 					movement = RUN_TO_BIF;
 				else
 					position = position.move(UP);
 			}else{
-				if(!m.can_move(position,DOWN))
+				if(!m[position].connected(DOWN))
 					movement = RUN_TO_BIF;
 				else
 					position = position.move(DOWN);
 			}
-		}else if(movement == RUN_TO_BIF){
+		}
+		if(movement == RUN_TO_BIF){
 			if(observed & (NORTH & BIFURCATION)){
 				position = position.move(UP);
 			}else if(observed & (SOUTH & BIFURCATION)){
@@ -97,14 +100,25 @@ int runner::avalia(){
 		pth.push_back(position);
 	}
 	set_path(pth);
-	printf("%d\n",score);
-	return score;
+	score -= 50*keys_acquired;
+	//printf("%d\n",score);
+	return -score;
 }
 
 runner runner::transa(runner& r,int legacy){
 	runner filho(r);
-	filho.mutacao();
+	filho.mutacao(legacy/100);
 	return filho;
+}
+
+void runner::mutacao(int amnt){
+	int entry, new_val;
+	for(int k=0;k<amnt;k++){
+		entry = rand()%TABLESIZE;
+		new_val = rand()%(ACTION_SIZE-1);
+		if(new_val >= get_t()[entry]) new_val++;
+		set_table_entry(entry,new_val);
+	}
 }
 
 void runner::animate(){

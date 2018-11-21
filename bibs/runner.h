@@ -16,5 +16,6 @@ public:
 
 	int avalia();
 	runner transa(runner&,int);
+	void mutacao(int);
 	void animate();
 };

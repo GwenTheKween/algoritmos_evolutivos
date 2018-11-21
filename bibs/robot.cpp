@@ -1,7 +1,7 @@
 #include "robot.h"
 
 void wait(int ms){
-    usleep(ms*100);
+    usleep(ms*1000);
 }
 
 robo::robo(const robo& parent):gene(parent.gene),path(parent.path),t(parent.t){}

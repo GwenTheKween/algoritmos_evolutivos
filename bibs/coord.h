@@ -57,7 +57,7 @@ public:
 		return coord(-1,-1);
     }
 
-    void debug(char c){
+    void debug(char c='\t'){
         std::cout<<'('<<X<<','<<Y<<')'<<c;
     }
 };
