@@ -33,61 +33,38 @@ runner& runner::operator =(runner&& r){
 
 int runner::avalia(){
 	//return robo::avalia(this->m);
+	coord key_location;
 	int score = 0,movement;
 	char observed;
 	std::vector<coord> pth;
 	pth.push_back(position);
+	key_location = get_gene()[0];
 	//get_gene()[0].debug();
 	while(score < 1000){
 		score++;
 		observed = m.look_around(position);
+		observed |= ( 	(NORTH & KEY_DIR) * (key_location.y() < position.y()) |
+				(SOUTH & KEY_DIR) * (key_location.y() > position.y()) |
+				(EAST & KEY_DIR) * (key_location.x() < position.x())  |
+				(WEST & KEY_DIR) * (key_location.x() > position.x()));
 		movement = decision(observed);
 		//printf("%d\t",movement);
-		if(movement == MATCH_X){
-			if(position.x() > get_gene()[keys_acquired].x()){
-				if(!m[position].connected(RIGHT))
-					movement = MATCH_Y;
-				else
-					position = position.move(RIGHT);
-			}else{
-				if(!m[position].connected(LEFT))
-					movement = MATCH_Y;
-				else
-					position = position.move(LEFT);
-			}
-		}
-		if(movement == MATCH_Y){
-			if(position.y() > get_gene()[keys_acquired].y()){
-				if(!m[position].connected(UP))
-					movement = RUN_TO_BIF;
-				else
-					position = position.move(UP);
-			}else{
-				if(!m[position].connected(DOWN))
-					movement = RUN_TO_BIF;
-				else
-					position = position.move(DOWN);
-			}
-		}
-		if(movement == RUN_TO_BIF){
-			if(observed & (NORTH & BIFURCATION)){
-				position = position.move(UP);
-			}else if(observed & (SOUTH & BIFURCATION)){
-				position = position.move(DOWN);
-			}else if(observed & (EAST & BIFURCATION)){
-				position = position.move(LEFT);
-			}else if(observed & (WEST & BIFURCATION)){
+		if(movement == INC_X){
+			if(m[position].connected(RIGHT)){
 				position = position.move(RIGHT);
 			}
-		}else if(movement == RUN_FROM_M){
-			if(m.can_move(position,UP))
-				position = position.move(UP);
-			else if(m.can_move(position,DOWN))
-				position = position.move(DOWN);
-			else if(m.can_move(position,LEFT))
+		} else if(movement == DEC_X){
+			if(m[position].connected(LEFT)){
 				position = position.move(LEFT);
-			else if(m.can_move(position,RIGHT))
-				position = position.move(RIGHT);
+			}
+		}else if(movement == INC_Y){
+			if(m[position].connected(DOWN)){
+				position = position.move(DOWN);
+			}
+		}else if(movement == DEC_Y){
+			if(m[position].connected(UP)){
+				position = position.move(UP);
+			}
 		}
 
 		if(position == get_gene()[keys_acquired]){

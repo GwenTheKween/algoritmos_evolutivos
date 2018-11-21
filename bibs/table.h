@@ -1,27 +1,29 @@
 #include "coord.h"
 #include <stdlib.h>
 
-#define TABLESIZE 256
+#define TABLESIZE 65536
 
 enum actions{
-	MATCH_X,
-	MATCH_Y,
-	RUN_TO_BIF,
-	RUN_FROM_M,
+	INC_X,
+	DEC_X,
+	INC_Y,
+	DEC_Y,
 	ACTION_SIZE
 };
 
 enum direction{
-	NORTH = 0x3,
-	SOUTH = 0xc,
-	EAST = 0x30,
-	WEST = 0xc0,
+	NORTH = 0x000f,
+	SOUTH = 0x00f0,
+	 EAST = 0x0f00,
+	 WEST = 0xf000
 };
 
 enum visible{ 
 	//to be used as (MINOTAUR & NORTH) | (BIFURCATION & SOUTH)
-	MINOTAUR = 0x55,
-	BIFURCATION = 0xaa,
+	MINOTAUR = 0x1111,
+	BIFURCATION = 0x2222,
+	KEY_DIR = 0x4444,
+	CONNECTED = 0x8888
 };
 
 class table{

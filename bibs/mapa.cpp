@@ -66,6 +66,7 @@ int map::look_around(coord pos){
 	tile curr = (*this)[looking];
 	//checks all the directions
 	//first: up
+	ret |= ((CONNECTED & NORTH) * (curr.connected(UP)));
 	while(curr.connected(UP)){
 		ret|=(//if current tile has a sideways conection
 			(curr.connected(LEFT) || curr.connected(RIGHT))
@@ -76,6 +77,7 @@ int map::look_around(coord pos){
 	}
 	looking = pos;
 	curr = (*this)[looking];
+	ret |= ((CONNECTED & SOUTH) * curr.connected(DOWN));
 	//second: down
 	while(curr.connected(DOWN)){
 		ret|=(//if current tile has a sideways conection
@@ -87,6 +89,7 @@ int map::look_around(coord pos){
 	}
 	looking = pos;
 	curr = (*this)[looking];
+	ret |= ((CONNECTED & EAST) * curr.connected(LEFT));
 	//third: left
 	while(curr.connected(LEFT)){
 		ret|=(//if current tile has a vertical conection
@@ -98,6 +101,7 @@ int map::look_around(coord pos){
 	}
 	looking = pos;
 	curr = (*this)[looking];
+	ret |= ((CONNECTED & WEST) * curr.connected(RIGHT));
 	//last: right
 	while(curr.connected(RIGHT)){
 		ret|=(//if current tile has an vertical conection
@@ -221,6 +225,7 @@ void map::generate_loops(int n){
 		}
 
 		//directions that have no connection and represent a possible movement
+		dirs.clear();
 		for(int j=0;j<dir_size;j++){
 			if((!((*this)[door].connected(direction[j]))) && 
 				  can_move(door,direction[j]) && 
@@ -255,7 +260,6 @@ void map::generate_loops(int n){
 		doors.push_back(door);
 		keys.push_back(key);
 
-		dirs.clear();
 	}
 }
 
