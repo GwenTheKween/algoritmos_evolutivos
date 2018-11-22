@@ -26,7 +26,10 @@ private:
 	int tipo; // type of cross-over to be used
     int range; // range of mutation
     int end_cond;//which end condition was chosen
-    int stable_count; //ho wmany generations have the scores been stable for
+    int stable_count; //how many generations have the scores been stable for
+    int nuclear_countdown = 10; //if no other individuals surpass the current best,
+   				//the whole population is "nuked", that is, a new
+				//population is generated (with the current best preserved) 
 public:
 	//funcoes para inicializacao
 	evolutivo(){}; //presente por motivos de debug
@@ -43,6 +46,7 @@ public:
 	std::vector<type> transa_por_elitismo();
 	std::vector<type> transa_por_roleta();
 	std::vector<type> transa_por_torneio(int = 2);//torneio com n individuos
+	void nuke(); //will wipe out the current population and generate a new one
 };
 
 template<class type> evolutivo<type>::evolutivo(std::vector<type> v,int tipo_transa,int cond_end, int mut_rng):
@@ -69,9 +73,9 @@ template<class type>type evolutivo<type>::get_best(){
 }
 
 
-//methd for iterating various generations of the evolution
+//method for iterating various generations of the evolution
 template<class type>void evolutivo<type>::itera(int n,bool verbose){
-    int gen=0;
+    int gen=0, rng = range;
     //      if it has iterated       or     has been stable for
     //      through all generations         enough generations
 	while((gen<n && end_cond==FIXED) || (stable_count<n && end_cond==STABLE)){
@@ -95,17 +99,35 @@ template<class type>void evolutivo<type>::itera(int n,bool verbose){
         new_mx=notas[0];
 		for(unsigned int i=1;i<individuo.size();i++){
 			notas[i]=individuo[i].avalia();
-            if(new_mx<notas[i]) new_mx=notas[i];
-        }
-        if(new_mx == mx){
-            stable_count++;
-        }else{
-            stable_count=0;
-        }
-        gen++;
+            		if(new_mx<notas[i]) new_mx=notas[i];
+        	}
+       		if(new_mx == mx){
+            		stable_count++;
+			nuclear_countdown--;
+			range = rng*stable_count;	//Mutation range increases trying to find another maximum.
+        	}else{
+            		stable_count=0;
+			range = rng;
+			nuclear_countdown = 10;
+        	}
+		if(nuclear_countdown <= 0){
+			nuke();
+		}
+
+        	gen++;
 	}
 }
+//TODO this function...
+template<class type> void evolutivo<type>::nuke(){
+	int  i;
+	individuo[0] = get_best();
+	for(i=1;i<individuo.size();i++){
+		individuo[i].random();
+	}
 
+
+	return;
+}
 template<class type> std::vector<type> evolutivo<type>::transa_por_elitismo(){
 	//calcula qual eh o melhor individuo
 	unsigned int best=0;
@@ -125,45 +147,60 @@ template<class type> std::vector<type> evolutivo<type>::transa_por_elitismo(){
 }
 
 
-//NAO TA FUNCIONANDO
 template<class type> std::vector<type> evolutivo<type>::transa_por_roleta(){
 	//calcula a soma das notas, para agir como valor maximo do range
-	//negs indica quanto a resposta tem que ser shiftada para abaixo de 0
+	//sum is used to be sure the random number generated will be smaller than the total score
+	//negs is used to shift the random number in cases when the scoring system is negative
 	double sum=0,negs=notas[0];
 	std::vector<type> nova_geracao;
+	
+	int best = notas[0],best_ind=0;
+		//making sure the current best individual is passed on to the next generation
+	for (unsigned int i = 1; i<individuo.size(); i++){ 
+		if (best < notas[i]) {
+			best = notas[i];
+			best_ind = i;
+		}
+	}
+	nova_geracao.push_back(individuo[best_ind]);
+
 	for (unsigned int i = 0; i < notas.size(); i++) {
 		if (notas[i] < negs) negs = notas[i];
 	}
 	for (unsigned int i = 0; i < notas.size(); i++) {
-        notas[i]-=negs;
-		sum += notas[i];
+		if(negs<=0){
+			sum += notas[i]-negs;
+		}else{
+			sum += notas[i];
+		}
+		sum++;
 	}
-		
-	for (unsigned int k = 0; k < individuo.size(); k++) {
+	//Making sure the total sum is more than zero, and that each and every individual can be selected.
+
+	for (unsigned int k = 0; k < individuo.size()-1; k++) {
 		//gera dois numeros aleatorios, uniformemente distribuido, entre [0,sum)
 		double pai = rand(), mae = rand();
 		pai /= RAND_MAX;
 		pai *= sum;
 		mae /= RAND_MAX;
 		mae *= sum;
-		std::cout << pai << '\t' << mae << std::endl;
-
+		
 		//seleciona o pai
 		int i = -1;
 		while (pai > 0) {
 			i++;
 			pai -= notas[i];
+			pai--;
 		}
-		std::cout << i << '\t';
 		//seleciona a mae
 		int j = -1;
 		while (mae > 0) {
 			j++;
 			mae -= notas[j];
+			mae--;
 		}
-		std::cout << j << '\n';
 
-		nova_geracao.push_back(individuo[j-1].transa(individuo[i-1], range));
+		nova_geracao.push_back(individuo[j].transa(individuo[i], range));
 
 	}
 	return nova_geracao;
