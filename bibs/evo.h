@@ -47,7 +47,7 @@ public:
 	std::vector<type> transa_por_elitismo();
 	std::vector<type> transa_por_roleta();
 	std::vector<type> transa_por_torneio(int = 2);//torneio com n individuos
-	std::vector<type> nuke(); //will wipe out the current population and generate a new one
+	void nuke(); //will wipe out the current population and generate a new one
 };
 
 template<class type> evolutivo<type>::evolutivo(std::vector<type> v,int tipo_transa,int cond_end, int mut_rng):
@@ -119,8 +119,15 @@ template<class type>void evolutivo<type>::itera(int n,bool verbose){
 	}
 }
 //TODO this function...
-template<class type> std::vector<type> evolutivo<type>::nuke(){
-		return 0;
+template<class type> void evolutivo<type>::nuke(){
+	int  i;
+	individuo[0] = get_best();
+	for(i=1;i<individuo.size();i++){
+		individuo[i].random();
+	}
+
+
+	return;
 }
 template<class type> std::vector<type> evolutivo<type>::transa_por_elitismo(){
 	//calcula qual eh o melhor individuo
@@ -156,7 +163,6 @@ template<class type> std::vector<type> evolutivo<type>::transa_por_roleta(){
 		}
 	}
 	nova_geracao.push_back(individuo[best_ind]);
-
 	for (int i = 0; i < notas.size(); i++) {
 		if (notas[i] < negs) negs = notas[i];
 	}

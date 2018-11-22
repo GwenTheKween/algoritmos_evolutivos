@@ -39,6 +39,9 @@ public:
 	double get_gene(){
 		return gene;
 	}
+	void random(){
+		gene = rand()%2000;
+	}
 };
 
 #endif
