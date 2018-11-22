@@ -12,8 +12,24 @@ table::table(table&& t){
 
 void table::gen_random(){
 	int i,val;
+	std::vector<int> valid;
 	for(i=0;i<TABLESIZE;i++){
-		val = rand()%ACTION_SIZE;
+		valid.clear();
+		if(i & (CONNECTED & NORTH)) valid.push_back(MOVE_UP);
+
+		if(i & (CONNECTED & SOUTH)) valid.push_back(MOVE_DOWN);
+
+		if(i & (CONNECTED & EAST)) valid.push_back(MOVE_LEFT);
+
+		if(i & (CONNECTED & WEST)) valid.push_back(MOVE_RIGHT);
+
+
+		if(valid.size() > 0){
+			val = valid[rand()%valid.size()];
+		}else{
+			val = 0;
+		}
+//		val = (valid.size()) ? (valid[rand()%valid.size()]) : (0);
 		reaction[i] = val;
 	}
 }
@@ -31,8 +47,8 @@ table table::cross_over(table& t){
 
 void table::debug(){
 	for(int i=0;i<TABLESIZE; i++){
-		if(i%32 == 0) printf("\n");
-		printf("%d",reaction[i]);
+		if(i%16 == 0) printf("\n");
+		printf("%04x: %d\t",i,reaction[i]);
 	}
 	printf("\n");
 }

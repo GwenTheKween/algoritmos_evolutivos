@@ -13,6 +13,7 @@ robo::robo(map& model){
     std::random_shuffle(keys.begin(),keys.end());
 	gene=keys;
 	gene.push_back(coord(0,0));
+	t.gen_random();
 }
 
 void robo::simulate(map& m){
@@ -81,7 +82,7 @@ void robo::mutacao(){
 }
 
 void robo::animate(map& m){
-    unsigned int k=0;
+    unsigned int k=0,tmp;
     coord end(0,0);
     for(unsigned int i=0;i<path.size();i++){
         system("clear");
@@ -93,6 +94,8 @@ void robo::animate(map& m){
 //        if(k<gene.size())gene[k].debug(' ');
 //        else end.debug(' ');
         printf("%lu\n",path.size());
+	tmp = m.look_around(path[i]);
+	printf("%04x,%d: (%d,%d,%d,%d)\n",tmp,t[tmp],(tmp & CONNECTED & NORTH),(tmp & CONNECTED & SOUTH),(tmp & CONNECTED & EAST),(tmp & CONNECTED & WEST));
         wait(100);
     }
 }

@@ -1,14 +1,15 @@
 #include "coord.h"
 #include <stdlib.h>
+#include <vector>
 
-#define TABLESIZE 65536
+#define TABLESIZE 0x10000
 
 enum actions{
-	INC_X,
-	DEC_X,
-	INC_Y,
-	DEC_Y,
-	ACTION_SIZE
+	MOVE_UP = 1,
+	MOVE_DOWN,
+	MOVE_LEFT,
+	MOVE_RIGHT,
+	ACTION_SIZE = 4
 };
 
 enum direction{
@@ -20,10 +21,10 @@ enum direction{
 
 enum visible{ 
 	//to be used as (MINOTAUR & NORTH) | (BIFURCATION & SOUTH)
-	MINOTAUR = 0x1111,
+	MINOTAUR = 0x8888,
 	BIFURCATION = 0x2222,
 	KEY_DIR = 0x4444,
-	CONNECTED = 0x8888
+	CONNECTED = 0x1111
 };
 
 class table{

@@ -15,17 +15,19 @@ int main(int argc,char** argv){
         print_help(argv[0]);
     }else{
         g.gen_map(10);
-        for(int i=0;i<40;i++){
+        for(int i=0;i<1;i++){
             ind.push_back(runner(g));
         }
+	table t;
+	t.gen_random();
+//	t.debug();
 	g.animate(coord(0,0));
-//        evolutivo<runner> e(ind,processed[TIPO_TRANSA],processed[COND_FIM]);
-//	e.itera(processed[GEN_AMNT],processed[VERBOSE]);
-//	runner r2(e.get_best());
-//	r2.animate();
-        //e.itera(processed[GEN_AMNT]*10,processed[VERBOSE]);
-        //robo d2(e.get_best());
-//        d2.animate();
+        evolutivo<runner> e(ind,processed[TIPO_TRANSA],processed[COND_FIM]);
+	printf("%d\n",processed[GEN_AMNT]);
+	int n;
+	scanf("%d\n",&n);
+	e.itera(processed[GEN_AMNT],processed[VERBOSE]);
+	e.get_best().animate();
     }
     return 0;
 }

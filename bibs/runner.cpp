@@ -49,19 +49,19 @@ int runner::avalia(){
 				(WEST & KEY_DIR) * (key_location.x() > position.x()));
 		movement = decision(observed);
 		//printf("%d\t",movement);
-		if(movement == INC_X){
+		if(movement == MOVE_RIGHT){
 			if(m[position].connected(RIGHT)){
 				position = position.move(RIGHT);
 			}
-		} else if(movement == DEC_X){
+		} else if(movement == MOVE_LEFT){
 			if(m[position].connected(LEFT)){
 				position = position.move(LEFT);
 			}
-		}else if(movement == INC_Y){
+		}else if(movement == MOVE_DOWN){
 			if(m[position].connected(DOWN)){
 				position = position.move(DOWN);
 			}
-		}else if(movement == DEC_Y){
+		}else if(movement == MOVE_UP){
 			if(m[position].connected(UP)){
 				position = position.move(UP);
 			}
