@@ -5,7 +5,9 @@ map::map(const map& m):
 	width(m.width),
 	t(m.t),
 	doors( m.doors),
-	keys(m.keys)
+	keys(m.keys),
+	initMinotaur(m.Minotaur),
+	Minotaur(m.Minotaur)
 	{}
 
 map::map(map&& m):
@@ -13,7 +15,9 @@ map::map(map&& m):
 	width(m.width),
 	t(m.t),
 	doors(m.doors),
-	keys(m.keys)
+	keys(m.keys),
+	initMinotaur(m.Minotaur),
+	Minotaur(m.Minotaur)
 	{}
 
 map::map(map& model):
@@ -21,7 +25,9 @@ map::map(map& model):
 	width(model.w()),
 	t(model.t),
 	doors(model.doors),
-	keys(model.keys)
+	keys(model.keys),
+	initMinotaur(model.Minotaur),
+	Minotaur(model.Minotaur)
 	{}
 
 
@@ -33,6 +39,7 @@ map& map::operator =(const map& other){
 		width = other.width;
 		keys = other.keys;
 		doors = other.doors;
+		Minotaur = other.Minotaur;
 	}
 	return (*this);
 }
@@ -61,7 +68,7 @@ void map::connect(char dir, coord c){
 }
 
 int map::look_around(coord pos){
-	int i,ret=0;
+	int ret=0;
 	coord looking(pos);
 	tile curr = (*this)[looking];
 	//checks all the directions
@@ -75,8 +82,9 @@ int map::look_around(coord pos){
 			if(curr.connected(LEFT) || curr.connected(RIGHT)){
 			//then you can move up to find a bifurcation
 				ret|=(BIFURCATION & NORTH);
-				//and stop looking
-				break;
+			}
+			if(Minotaur == looking){
+				ret |= (MINOTAUR & NORTH);
 			}
 		}while(curr.connected(UP));
 		looking = pos;
@@ -92,8 +100,9 @@ int map::look_around(coord pos){
 			if(curr.connected(LEFT) || curr.connected(RIGHT)){
 			//then you can move up to find a bifurcation
 				ret|=(BIFURCATION & SOUTH);
-				//and stop looking
-				break;
+			}
+			if(Minotaur == looking){
+				ret |= (MINOTAUR & SOUTH);
 			}
 		}while(curr.connected(DOWN));
 		looking = pos;
@@ -109,8 +118,9 @@ int map::look_around(coord pos){
 			if(curr.connected(UP) || curr.connected(DOWN)){
 			//then you can move up to find a bifurcation
 				ret|=(BIFURCATION & WEST);
-				//and stop looking
-				break;
+			}
+			if(Minotaur == looking){
+				ret |= (MINOTAUR & WEST);
 			}
 		}while(curr.connected(LEFT));
 		looking = pos;
@@ -126,14 +136,27 @@ int map::look_around(coord pos){
 			if(curr.connected(UP) || curr.connected(DOWN)){
 			//then you can move up to find a bifurcation
 				ret|=(BIFURCATION & EAST);
-				//and stop looking
-				break;
+			}
+			if(Minotaur == looking){
+				ret |= (MINOTAUR & EAST);
 			}
 		}while(curr.connected(RIGHT));
 		looking = pos;
 		curr = (*this)[looking];
 	}
 	return ret;
+}
+
+coord map::updateMinotaur(){
+	int dir;
+	std::vector<int> valid;
+	if((*this)[Minotaur].connected(UP)) valid.push_back(UP);
+	if((*this)[Minotaur].connected(DOWN)) valid.push_back(DOWN);
+	if((*this)[Minotaur].connected(LEFT)) valid.push_back(LEFT);
+	if((*this)[Minotaur].connected(RIGHT)) valid.push_back(RIGHT);
+	dir = rand()%valid.size();
+	Minotaur = Minotaur.move(valid[dir]);
+	return Minotaur;
 }
 
 std::vector<coord> map::BFS(coord p1,coord p2){
@@ -227,6 +250,8 @@ void map::gen_map(int n){
 	coord pos(rand() % height, rand() % width);
 	DFS(pos);
 	generate_loops(n);
+	Minotaur.set(rand()%height,rand()%width);
+	initMinotaur = Minotaur;
 }
 
 void map::generate_loops(int n){
@@ -319,10 +344,10 @@ void map::DFS(coord pos){
 	}
 }
 
-void map::animate(coord pos){
+void map::animate(coord pos,coord mino){
 	//prints the map using a 3x3 space, very ugly, just for debug sake
 	coord p;
-	char body[]={'.','*','^','v','<','>','@'};
+	char body[]={'.','*','^','v','<','>','@','M'};
 	int b;
 	for(int i=0;i<h();i++){
 		for(int j=0;j<w();j++){
@@ -341,6 +366,7 @@ void map::animate(coord pos){
 				}
 			}
 			if(p==pos) b=6;
+			else if(p == mino) b = 7;
 			printf("%c%c%c",((*this)[p].left())?'.':' ',body[b],((*this)[p].right())?'.':' ');
 		}
 		printf("\n");

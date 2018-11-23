@@ -3,7 +3,8 @@
 runner::runner(runner const& r):
 	robo::robo(r),
 	position(0,0),
-	keys_acquired(0)
+	keys_acquired(0),
+	mino_path(r.mino_path)
 {
 	m = r.m;
 }
@@ -11,7 +12,8 @@ runner::runner(runner const& r):
 runner::runner(runner&& r):
 	robo::robo(r),
 	position(0,0),
-	keys_acquired(0)
+	keys_acquired(0),
+	mino_path(r.mino_path)
 {
 	m = r.m;
 }
@@ -20,6 +22,7 @@ runner& runner::operator =(runner const& r){
 	m = r.m;
 	robo::operator=(r);
 	position = r.position;
+	mino_path = r.mino_path;
 	return (*this);
 }	
 
@@ -27,13 +30,14 @@ runner& runner::operator =(runner&& r){
 	m = r.m;
 	robo::operator=(r);
 	position = r.position;
+	mino_path = mino_path;
 	return (*this);
 }
 
 
 int runner::avalia(){
 	//return robo::avalia(this->m);
-	coord key_location;
+	coord key_location,Mino;
 	int score = 0,movement;
 	int observed;
 	std::vector<coord> pth;
@@ -78,7 +82,14 @@ int runner::avalia(){
 			else
 				m.unlock(position);
 		}
+		Mino = m.updateMinotaur();
 		pth.push_back(position);
+		mino_path.push_back(Mino);
+		if(position == Mino){
+			score += 500;
+			printf("gotcha!\n");
+			break;
+		}
 	}
 	set_path(pth);
 	score -= 50*keys_acquired;
@@ -102,5 +113,5 @@ void runner::mutacao(int amnt){
 }
 
 void runner::animate(){
-	robo::animate(m);
+	robo::animate(m,mino_path);
 }

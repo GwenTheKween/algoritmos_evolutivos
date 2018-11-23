@@ -6,6 +6,7 @@ private:
 	map m;
 	coord position;
 	int keys_acquired;
+	std::vector<coord> mino_path;
 public:
 	runner(map& model):robo(model),m(model),position(0,0),keys_acquired(0){}
 	runner(runner const&);

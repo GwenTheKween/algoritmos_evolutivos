@@ -31,7 +31,7 @@ public:
     void random();
     robo transa(robo&,int);
     void mutacao();
-    void animate(map&);
+    void animate(map&,std::vector<coord>&);
 };
 
 #endif

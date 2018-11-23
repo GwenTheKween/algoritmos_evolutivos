@@ -82,12 +82,12 @@ void robo::mutacao(){
     path.clear();
 }
 
-void robo::animate(map& m){
+void robo::animate(map& m, std::vector<coord>& mino){
     unsigned int k=0,tmp;
     coord end(0,0);
     for(unsigned int i=0;i<path.size();i++){
         system("clear");
-		m.animate(path[i]);
+		m.animate(path[i],mino[i]);
         if(k<gene.size() && path[i] == gene[k]){
             k++;
 			i--;

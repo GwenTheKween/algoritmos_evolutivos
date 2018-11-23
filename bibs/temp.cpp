@@ -22,7 +22,6 @@ int main(int argc,char** argv){
 	table t;
 	t.gen_random();
 //	t.debug();
-	g.animate(coord(0,0));
         evolutivo<runner> e(ind,processed[TIPO_TRANSA],processed[COND_FIM]);
 	printf("%d\n",processed[GEN_AMNT]);
 	e.itera(processed[GEN_AMNT],processed[VERBOSE]);
