@@ -26,7 +26,7 @@ public:
     void simulate(map&);
     int avalia(map&);
     void debug();
-    int decision(char);
+    int decision(int);
 
     void random();
     robo transa(robo&,int);

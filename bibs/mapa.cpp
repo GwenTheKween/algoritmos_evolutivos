@@ -66,50 +66,72 @@ int map::look_around(coord pos){
 	tile curr = (*this)[looking];
 	//checks all the directions
 	//first: up
-	ret |= ((CONNECTED & NORTH) * (curr.connected(UP)));
-	while(curr.connected(UP)){
-		ret|=(//if current tile has a sideways conection
-			(curr.connected(LEFT) || curr.connected(RIGHT))
+	if(curr.connected(UP)){
+		ret |= (CONNECTED & NORTH);
+		do{
+			looking = looking.move(UP);
+			curr = (*this)[looking];
+			//if current tile has a sideways conection
+			if(curr.connected(LEFT) || curr.connected(RIGHT)){
 			//then you can move up to find a bifurcation
-			&(BIFURCATION & NORTH));
-		looking = looking.move(UP);
+				ret|=(BIFURCATION & NORTH);
+				//and stop looking
+				break;
+			}
+		}while(curr.connected(UP));
+		looking = pos;
 		curr = (*this)[looking];
 	}
-	looking = pos;
-	curr = (*this)[looking];
-	ret |= ((CONNECTED & SOUTH) * curr.connected(DOWN));
 	//second: down
-	while(curr.connected(DOWN)){
-		ret|=(//if current tile has a sideways conection
-			(curr.connected(LEFT) || curr.connected(RIGHT))
-			//then you can move down to find a bifurcation
-			&(BIFURCATION & SOUTH));
-		looking = looking.move(DOWN);
+	if(curr.connected(DOWN)){
+		ret |= (CONNECTED & SOUTH);
+		do{
+			looking = looking.move(DOWN);
+			curr = (*this)[looking];
+			//if current tile has a sideways conection
+			if(curr.connected(LEFT) || curr.connected(RIGHT)){
+			//then you can move up to find a bifurcation
+				ret|=(BIFURCATION & SOUTH);
+				//and stop looking
+				break;
+			}
+		}while(curr.connected(DOWN));
+		looking = pos;
 		curr = (*this)[looking];
 	}
-	looking = pos;
-	curr = (*this)[looking];
-	ret |= ((CONNECTED & EAST) * curr.connected(LEFT));
-	//third: left
-	while(curr.connected(LEFT)){
-		ret|=(//if current tile has a vertical conection
-			(curr.connected(UP) || curr.connected(DOWN))
-			//then you can move left to find a bifurcation
-			&(BIFURCATION & EAST));
-		looking = looking.move(LEFT);
+	//thrid: left
+	if(curr.connected(LEFT)){
+		ret |= (CONNECTED & WEST);
+		do{
+			looking = looking.move(LEFT);
+			curr = (*this)[looking];
+			//if current tile has a sideways conection
+			if(curr.connected(UP) || curr.connected(DOWN)){
+			//then you can move up to find a bifurcation
+				ret|=(BIFURCATION & WEST);
+				//and stop looking
+				break;
+			}
+		}while(curr.connected(LEFT));
+		looking = pos;
 		curr = (*this)[looking];
 	}
-	looking = pos;
-	curr = (*this)[looking];
-	ret |= ((CONNECTED & WEST) * curr.connected(RIGHT));
-	//last: right
-	while(curr.connected(RIGHT)){
-		ret|=(//if current tile has an vertical conection
-			(curr.connected(UP) || curr.connected(DOWN))
-			//then you can move right to find a bifurcation
-			&(BIFURCATION & WEST));
-		looking = looking.move(RIGHT);
-		curr=(*this)[looking];
+	//fourth: right
+	if(curr.connected(RIGHT)){
+		ret |= (CONNECTED & EAST);
+		do{
+			looking = looking.move(RIGHT);
+			curr = (*this)[looking];
+			//if current tile has a sideways conection
+			if(curr.connected(UP) || curr.connected(DOWN)){
+			//then you can move up to find a bifurcation
+				ret|=(BIFURCATION & EAST);
+				//and stop looking
+				break;
+			}
+		}while(curr.connected(RIGHT));
+		looking = pos;
+		curr = (*this)[looking];
 	}
 	return ret;
 }

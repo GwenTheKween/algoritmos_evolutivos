@@ -46,7 +46,7 @@ void robo::debug(){
     printf("\n");
 }
 
-int robo::decision(char obs){
+int robo::decision(int obs){
 	return t[obs];
 }
 
@@ -58,7 +58,8 @@ void robo::random(){
 
 robo robo::transa(robo& r, int legacy){ //legacy esta aqui para "legacy support", ele nao faz nada nesse caso
     robo filho(r);
-    filho.mutacao();
+    filho.t = r.t.cross_over(t);
+//    filho.mutacao();
     return filho;
 }
 

@@ -75,11 +75,11 @@ template<class type>void evolutivo<type>::itera(int n,bool verbose){
     //      if it has iterated       or     has been stable for
     //      through all generations         enough generations
 	while((gen<n && end_cond==FIXED) || (stable_count<n && end_cond==STABLE)){
-        double mx=notas[0],sum=notas[0],new_mx;
-        for(unsigned int i=1;i<notas.size();i++){
-            if(mx<notas[i])mx=notas[i]; //finds the best evaluation of the generation
-            sum+=notas[i];
-        }
+		double mx=notas[0],sum=notas[0],new_mx;
+		for(unsigned int i=1;i<notas.size();i++){
+		    if(mx<notas[i])mx=notas[i]; //finds the best evaluation of the generation
+		    sum+=notas[i];
+		}
 		if(verbose){
             //prints the average evaluation and the best evaluation
 			std::cout<<gen<<'\t'<<mx<<'\t'<<sum/notas.size()<<'\n';
@@ -90,19 +90,20 @@ template<class type>void evolutivo<type>::itera(int n,bool verbose){
 			individuo=transa_por_roleta();
 		else if(tipo==TORNEIO)
 			individuo=transa_por_torneio();
-        //finds the new best evaluation. Should it be the same as last, the generations have stabilized.
-        notas[0]=individuo[0].avalia();
-        new_mx=notas[0];
+		//finds the new best evaluation. Should it be the same as last, the generations have stabilized.
+		notas[0]=individuo[0].avalia();
+		new_mx=notas[0];
 		for(unsigned int i=1;i<individuo.size();i++){
 			notas[i]=individuo[i].avalia();
-            if(new_mx<notas[i]) new_mx=notas[i];
-        }
-        if(new_mx == mx){
-            stable_count++;
-        }else{
-            stable_count=0;
-        }
-        gen++;
+		    if(new_mx<notas[i]) new_mx=notas[i];
+		}
+		if(new_mx == mx){
+		    stable_count++;
+		}else{
+		    stable_count=0;
+		}
+		gen++;
+		printf("%d\n",stable_count);
 	}
 }
 

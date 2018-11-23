@@ -35,7 +35,7 @@ int runner::avalia(){
 	//return robo::avalia(this->m);
 	coord key_location;
 	int score = 0,movement;
-	char observed;
+	int observed;
 	std::vector<coord> pth;
 	pth.push_back(position);
 	key_location = get_gene()[0];
@@ -43,10 +43,14 @@ int runner::avalia(){
 	while(score < 1000){
 		score++;
 		observed = m.look_around(position);
-		observed |= ( 	(NORTH & KEY_DIR) * (key_location.y() < position.y()) |
-				(SOUTH & KEY_DIR) * (key_location.y() > position.y()) |
-				(EAST & KEY_DIR) * (key_location.x() < position.x())  |
-				(WEST & KEY_DIR) * (key_location.x() > position.x()));
+		if(key_location.x() < position.x())
+			observed |= (NORTH & KEY_DIR);
+		if(key_location.x() > position.x())
+			observed |= (SOUTH & KEY_DIR);
+		if(key_location.y() < position.y())
+			observed |= (WEST & KEY_DIR);
+		if(key_location.y() > position.y())
+			observed |= (EAST & KEY_DIR);
 		movement = decision(observed);
 		//printf("%d\t",movement);
 		if(movement == MOVE_RIGHT){
@@ -78,7 +82,6 @@ int runner::avalia(){
 	}
 	set_path(pth);
 	score -= 50*keys_acquired;
-	//printf("%d\n",score);
 	return -score;
 }
 
