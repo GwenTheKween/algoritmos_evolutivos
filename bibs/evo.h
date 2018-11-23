@@ -72,11 +72,23 @@ template<class type>type evolutivo<type>::get_best(){
 	return individuo[best];
 }
 
-
 //method for iterating various generations of the evolution
 template<class type>void evolutivo<type>::itera(int n,bool verbose){
     int gen=0, rng = range;
-    //      if it has iterated       or     has been stable for
+
+
+    // The count down is set up in order to be proportional to the amount of generations
+    // that will be ran through.
+    // It is also set up in order to allow for stability-based evolution, as the 
+    // population would be always nuked whenver things started to get stable.
+	if(end_cond==FIXED && n>10){
+		nuclear_countdown = n/10;
+	}
+	else{
+		nuclear_countdown = n+1;
+	}
+
+    //      if it has iterated       or     it has been stable for
     //      through all generations         enough generations
 	while((gen<n && end_cond==FIXED) || (stable_count<n && end_cond==STABLE)){
         double mx=notas[0],sum=notas[0],new_mx;
@@ -117,7 +129,8 @@ template<class type>void evolutivo<type>::itera(int n,bool verbose){
         	gen++;
 	}
 }
-//TODO this function...
+//Kills all the population, preserving only the best individual from that group.
+//Tries to find new ways to solve the problem whenever things get too stable.
 template<class type> void evolutivo<type>::nuke(){
 	int  i;
 	individuo[0] = get_best();
@@ -164,16 +177,16 @@ template<class type> std::vector<type> evolutivo<type>::transa_por_roleta(){
 	}
 	nova_geracao.push_back(individuo[best_ind]);
 
-	for (unsigned int i = 0; i < notas.size(); i++) {
-		if (notas[i] < negs) negs = notas[i];
-	}
+//	for (unsigned int i = 0; i < notas.size(); i++) {
+//		if (notas[i] < negs) negs = notas[i];
+//	}
+
 	for (unsigned int i = 0; i < notas.size(); i++) {
 		if(negs<=0){
 			sum += notas[i]-negs;
 		}else{
 			sum += notas[i];
 		}
-		sum++;
 	}
 	//Making sure the total sum is more than zero, and that each and every individual can be selected.
 
@@ -190,14 +203,12 @@ template<class type> std::vector<type> evolutivo<type>::transa_por_roleta(){
 		while (pai > 0) {
 			i++;
 			pai -= notas[i];
-			pai--;
 		}
 		//seleciona a mae
 		int j = -1;
 		while (mae > 0) {
 			j++;
 			mae -= notas[j];
-			mae--;
 		}
 
 		nova_geracao.push_back(individuo[j].transa(individuo[i], range));
