@@ -25,7 +25,7 @@ int main(int argc,char** argv){
         evolutivo<runner> e(ind,processed[TIPO_TRANSA],processed[COND_FIM]);
 	printf("%d\n",processed[GEN_AMNT]);
 	e.itera(processed[GEN_AMNT],processed[VERBOSE]);
-	e.get_best().animate();
+	//e.get_best().animate();
     }
     return 0;
 }

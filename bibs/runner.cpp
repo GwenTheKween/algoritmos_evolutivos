@@ -87,7 +87,10 @@ int runner::avalia(){
 		mino_path.push_back(Mino);
 		if(position == Mino){
 			score += 500;
-			printf("gotcha!\n");
+			//printf("gotcha!\n");
+			animate();
+			printf("press enter to continue\n");
+			scanf("%*");
 			break;
 		}
 	}
