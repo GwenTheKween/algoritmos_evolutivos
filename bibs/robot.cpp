@@ -87,6 +87,8 @@ void robo::animate(map& m, std::vector<coord>& mino){
     coord end(0,0);
     for(unsigned int i=0;i<path.size();i++){
         system("clear");
+	path[i].debug();
+	mino[i].debug('\n');
 		m.animate(path[i],mino[i]);
         if(k<gene.size() && path[i] == gene[k]){
             k++;
@@ -97,6 +99,7 @@ void robo::animate(map& m, std::vector<coord>& mino){
         printf("%lu\n",path.size());
 	tmp = m.look_around(path[i]);
 	printf("%04x,%d: (%d,%d,%d,%d)\n",tmp,t[tmp],(tmp & CONNECTED & NORTH),(tmp & CONNECTED & SOUTH),(tmp & CONNECTED & EAST),(tmp & CONNECTED & WEST));
-        wait(100);
+	gene[k].debug('\n');
+        wait(300);
     }
 }

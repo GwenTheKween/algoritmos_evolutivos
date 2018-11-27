@@ -10,8 +10,8 @@ int main(int argc,char** argv){
     int processed[SIZE_ARGV];
     std::vector<runner> ind;
     proc_argv(argc,argv,processed);
-//	srand(6);
-	srand(time(NULL));
+	srand(1);
+//	srand(time(NULL));
     if(processed[HELP]){
         print_help(argv[0]);
     }else{
@@ -25,7 +25,7 @@ int main(int argc,char** argv){
         evolutivo<runner> e(ind,processed[TIPO_TRANSA],processed[COND_FIM]);
 	printf("%d\n",processed[GEN_AMNT]);
 	e.itera(processed[GEN_AMNT],processed[VERBOSE]);
-	//e.get_best().animate();
+	e.get_best().animate();
     }
     return 0;
 }

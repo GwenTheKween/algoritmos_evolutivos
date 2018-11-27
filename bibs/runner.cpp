@@ -42,6 +42,8 @@ int runner::avalia(){
 	int observed;
 	std::vector<coord> pth;
 	pth.push_back(position);
+	mino_path.clear();
+	mino_path.push_back(m.get_Minotaur());
 	key_location = get_gene()[0];
 	//get_gene()[0].debug();
 	while(score < 1000){
@@ -86,11 +88,14 @@ int runner::avalia(){
 		pth.push_back(position);
 		mino_path.push_back(Mino);
 		if(position == Mino){
-			score += 500;
+			score += 1000;
 			//printf("gotcha!\n");
-			animate();
-			printf("press enter to continue\n");
-			scanf("%*");
+			//animate();
+			position.debug();
+			Mino.debug('\n');
+//			printf("type a number to continue\n");
+//			int debug_tmp;
+//			scanf("%d",&debug_tmp);
 			break;
 		}
 	}
