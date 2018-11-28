@@ -82,9 +82,7 @@ int map::look_around(coord pos){
 			if(curr.connected(LEFT) || curr.connected(RIGHT)){
 			//then you can move up to find a bifurcation
 				ret|=(BIFURCATION & NORTH);
-			}
-			if(Minotaur == looking){
-				ret |= (MINOTAUR & NORTH);
+				break;
 			}
 		}while(curr.connected(UP));
 		looking = pos;
@@ -100,9 +98,7 @@ int map::look_around(coord pos){
 			if(curr.connected(LEFT) || curr.connected(RIGHT)){
 			//then you can move up to find a bifurcation
 				ret|=(BIFURCATION & SOUTH);
-			}
-			if(Minotaur == looking){
-				ret |= (MINOTAUR & SOUTH);
+				break;
 			}
 		}while(curr.connected(DOWN));
 		looking = pos;
@@ -118,9 +114,7 @@ int map::look_around(coord pos){
 			if(curr.connected(UP) || curr.connected(DOWN)){
 			//then you can move up to find a bifurcation
 				ret|=(BIFURCATION & WEST);
-			}
-			if(Minotaur == looking){
-				ret |= (MINOTAUR & WEST);
+				break;
 			}
 		}while(curr.connected(LEFT));
 		looking = pos;
@@ -136,26 +130,21 @@ int map::look_around(coord pos){
 			if(curr.connected(UP) || curr.connected(DOWN)){
 			//then you can move up to find a bifurcation
 				ret|=(BIFURCATION & EAST);
-			}
-			if(Minotaur == looking){
-				ret |= (MINOTAUR & EAST);
+				break;
 			}
 		}while(curr.connected(RIGHT));
 		looking = pos;
 		curr = (*this)[looking];
 	}
+	ret |= pos.relative_dir(Minotaur) << MINOTAUR;
 	return ret;
 }
 
 coord map::updateMinotaur(){
 	int dir;
-	std::vector<int> valid;
-	if((*this)[Minotaur].connected(UP)) valid.push_back(UP);
-	if((*this)[Minotaur].connected(DOWN)) valid.push_back(DOWN);
-	if((*this)[Minotaur].connected(LEFT)) valid.push_back(LEFT);
-	if((*this)[Minotaur].connected(RIGHT)) valid.push_back(RIGHT);
-	dir = rand()%valid.size();
-	Minotaur = Minotaur.move(valid[dir]);
+	dir = rand()%4;
+	if((*this)[Minotaur].connected(direction[dir]))
+		Minotaur = Minotaur.move(direction[dir]);
 	return Minotaur;
 }
 

@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <vector>
 
-#define TABLESIZE 0x10000
+#define TABLESIZE 0x3001 
 
 enum actions{
 	MOVE_UP = 1,
@@ -13,18 +13,19 @@ enum actions{
 };
 
 enum direction{
-	NORTH = 0x000f,
-	SOUTH = 0x00f0,
-	 EAST = 0x0f00,
-	 WEST = 0xf000
+	NORTH = 0x03,
+	SOUTH = 0x0c,
+	 EAST = 0x30,
+	 WEST = 0xc0
 };
 
 enum visible{ 
-	//to be used as (MINOTAUR & NORTH) | (BIFURCATION & SOUTH)
-	MINOTAUR = 0x8888,
-	BIFURCATION = 0x2222,
-	KEY_DIR = 0x4444,
-	CONNECTED = 0x1111
+	//to be used as (CONNECTED & NORTH) | (BIFURCATION & SOUTH)
+	BIFURCATION = 0xaa,
+	CONNECTED = 0x55,
+	//to be used as relative_dir << MINOTAUR | relative_dir << KEY_DIR
+	MINOTAUR = 8,
+	KEY_DIR = 11
 };
 
 class table{

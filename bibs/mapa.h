@@ -36,7 +36,7 @@ public:
 	coord get_Minotaur(){return Minotaur;}
 
 	//operator overrides
-    tile operator [](coord P)const { return t[P.x()][P.y()];}
+    tile operator [](coord P)const {return t[P.x()][P.y()];}
     map& operator =(const map& other); //copy operator
     map& operator = (map&& m);//move operator
 

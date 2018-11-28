@@ -4,18 +4,18 @@ runner::runner(runner const& r):
 	robo::robo(r),
 	position(0,0),
 	keys_acquired(0),
+	m(r.m),
 	mino_path(r.mino_path)
 {
-	m = r.m;
 }
 
 runner::runner(runner&& r):
 	robo::robo(r),
 	position(0,0),
 	keys_acquired(0),
+	m(r.m),
 	mino_path(r.mino_path)
 {
-	m = r.m;
 }
 
 runner& runner::operator =(runner const& r){
@@ -49,14 +49,7 @@ int runner::avalia(){
 	while(score < 1000){
 		score++;
 		observed = m.look_around(position);
-		if(key_location.x() < position.x())
-			observed |= (NORTH & KEY_DIR);
-		if(key_location.x() > position.x())
-			observed |= (SOUTH & KEY_DIR);
-		if(key_location.y() < position.y())
-			observed |= (WEST & KEY_DIR);
-		if(key_location.y() > position.y())
-			observed |= (EAST & KEY_DIR);
+		observed |= position.relative_dir(key_location) << KEY_DIR;
 		movement = decision(observed);
 		//printf("%d\t",movement);
 		if(movement == MOVE_RIGHT){

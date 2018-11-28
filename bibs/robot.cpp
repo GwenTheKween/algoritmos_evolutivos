@@ -98,6 +98,7 @@ void robo::animate(map& m, std::vector<coord>& mino){
 //        else end.debug(' ');
         printf("%lu\n",path.size());
 	tmp = m.look_around(path[i]);
+	tmp |= path[i].relative_dir(gene[k]) << KEY_DIR;
 	printf("%04x,%d: (%d,%d,%d,%d)\n",tmp,t[tmp],(tmp & CONNECTED & NORTH),(tmp & CONNECTED & SOUTH),(tmp & CONNECTED & EAST),(tmp & CONNECTED & WEST));
 	gene[k].debug('\n');
         wait(300);
