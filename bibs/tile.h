@@ -34,18 +34,6 @@ public:
         return dir&direc;
     }
 
-    bool up(){ // if the tile is connected upwards
-        return dir&UP;
-    }
-    bool down(){ // if the tile is connected downwards
-        return dir&DOWN;
-    }
-    bool left(){ // if the tile is connected leftwards
-        return dir&LEFT;
-    }
-    bool right(){ // if the tile is connected rightwards
-        return dir&RIGHT;
-    }
 };
 
 #endif

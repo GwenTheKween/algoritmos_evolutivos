@@ -44,7 +44,7 @@ public:
     bool can_move(coord,int);
     void connect(char, coord);
     int look_around(coord);
-    coord updateMinotaur();
+    coord updateMinotaur(coord);
 
     //return the smallest path from p1 to p2 EXCLUDING P1
     std::vector<coord> BFS(coord p1,coord p2);

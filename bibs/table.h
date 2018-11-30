@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <vector>
 
-#define TABLESIZE 0x3001 
+#define TABLESIZE 0x4000 
 
 enum actions{
 	MOVE_UP = 1,

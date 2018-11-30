@@ -96,11 +96,13 @@ void robo::animate(map& m, std::vector<coord>& mino){
         }
 //        if(k<gene.size())gene[k].debug(' ');
 //        else end.debug(' ');
-        printf("%lu\n",path.size());
+        printf("%d\n",i+1000*k);
 	tmp = m.look_around(path[i]);
+	tmp &= 0x00ff;
+	tmp |= path[i].relative_dir(mino[i]) << MINOTAUR;
 	tmp |= path[i].relative_dir(gene[k]) << KEY_DIR;
 	printf("%04x,%d: (%d,%d,%d,%d)\n",tmp,t[tmp],(tmp & CONNECTED & NORTH),(tmp & CONNECTED & SOUTH),(tmp & CONNECTED & EAST),(tmp & CONNECTED & WEST));
 	gene[k].debug('\n');
-        wait(300);
+        wait(100);
     }
 }

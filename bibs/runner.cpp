@@ -2,18 +2,18 @@
 
 runner::runner(runner const& r):
 	robo::robo(r),
+	m(r.m),
 	position(0,0),
 	keys_acquired(0),
-	m(r.m),
 	mino_path(r.mino_path)
 {
 }
 
 runner::runner(runner&& r):
 	robo::robo(r),
+	m(r.m),
 	position(0,0),
 	keys_acquired(0),
-	m(r.m),
 	mino_path(r.mino_path)
 {
 }
@@ -36,7 +36,6 @@ runner& runner::operator =(runner&& r){
 
 
 int runner::avalia(){
-	//return robo::avalia(this->m);
 	coord key_location,Mino;
 	int score = 0,movement;
 	int observed;
@@ -45,7 +44,6 @@ int runner::avalia(){
 	mino_path.clear();
 	mino_path.push_back(m.get_Minotaur());
 	key_location = get_gene()[0];
-	//get_gene()[0].debug();
 	while(score < 1000){
 		score++;
 		observed = m.look_around(position);
@@ -77,24 +75,17 @@ int runner::avalia(){
 			else
 				m.unlock(position);
 		}
-		Mino = m.updateMinotaur();
+		Mino = m.updateMinotaur(position);
 		pth.push_back(position);
 		mino_path.push_back(Mino);
 		if(position == Mino){
-			score += 1000;
-			//printf("gotcha!\n");
-			//animate();
-			position.debug();
-			Mino.debug('\n');
-//			printf("type a number to continue\n");
-//			int debug_tmp;
-//			scanf("%d",&debug_tmp);
+			score -= 1000;
 			break;
 		}
 	}
 	set_path(pth);
-	score -= 50*keys_acquired;
-	return -score;
+	score += 1000*keys_acquired;
+	return score;
 }
 
 runner runner::transa(runner& r,int legacy){
@@ -105,11 +96,23 @@ runner runner::transa(runner& r,int legacy){
 
 void runner::mutacao(int amnt){
 	int entry, new_val;
+	std::vector<int> valid;
 	for(int k=0;k<amnt;k++){
 		entry = rand()%TABLESIZE;
-		new_val = rand()%(ACTION_SIZE-1);
-		if(new_val >= get_t()[entry]) new_val++;
+		if(entry & (CONNECTED & NORTH)) valid.push_back(MOVE_UP);
+
+		if(entry & (CONNECTED & SOUTH)) valid.push_back(MOVE_DOWN);
+
+		if(entry & (CONNECTED & EAST)) valid.push_back(MOVE_RIGHT);
+
+		if(entry & (CONNECTED & WEST)) valid.push_back(MOVE_LEFT);
+		if(valid.size() > 0){
+			new_val = rand()%(valid.size());
+			new_val = valid[new_val];
+		}else
+			new_val = 0;
 		set_table_entry(entry,new_val);
+		valid.clear();
 	}
 }
 

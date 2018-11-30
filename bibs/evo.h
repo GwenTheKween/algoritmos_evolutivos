@@ -103,7 +103,7 @@ template<class type>void evolutivo<type>::itera(int n,bool verbose){
 		    stable_count=0;
 		}
 		gen++;
-		printf("%d\n",stable_count);
+		printf("%d\t%d\n",stable_count,gen);
 	}
 }
 

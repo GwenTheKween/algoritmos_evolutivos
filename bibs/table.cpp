@@ -23,12 +23,6 @@ void table::gen_random(){
 
 		if(i & (CONNECTED & WEST)) valid.push_back(MOVE_LEFT);
 
-		/*
-		valid.push_back(MOVE_UP);
-		valid.push_back(MOVE_DOWN);
-		valid.push_back(MOVE_LEFT);
-		valid.push_back(MOVE_RIGHT);
-		*/
 
 		if(valid.size() > 0){
 			val = valid[rand()%valid.size()];

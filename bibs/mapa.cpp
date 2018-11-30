@@ -140,11 +140,47 @@ int map::look_around(coord pos){
 	return ret;
 }
 
-coord map::updateMinotaur(){
+coord map::updateMinotaur(coord r){
 	int dir;
-	dir = rand()%4;
-	if((*this)[Minotaur].connected(direction[dir]))
-		Minotaur = Minotaur.move(direction[dir]);
+	dir = rand()%2;
+	if(dir == 0){
+		dir = rand()%4;
+		dir = direction[dir];
+	}else{
+		dir = Minotaur.relative_dir(r);
+		if(dir == 0){// Y>,X>
+			if(rand()%2)
+				dir = UP;
+			else
+				dir = LEFT;
+		}else if(dir == 1){ //Y is equal, X is greater
+			dir = UP;
+		}else if(dir == 2){//Y<,X>
+			if(rand()%2)
+				dir = UP;
+			else
+				dir = RIGHT;
+		}else if(dir == 3){//X is equal, Y is greater
+			dir = LEFT;
+		}else if(dir == 4){//X is equal, Y is smaller
+			dir = RIGHT;
+		}else if(dir == 5){ // Y>,X<
+			if(rand()%2)
+				dir = DOWN;
+			else
+				dir = LEFT;
+		}else if( dir == 6){//Y is equal, X is smaller
+			dir = DOWN;
+		}else if(dir == 7){//Y<,X<
+			if(rand()%2)
+				dir = DOWN;
+			else
+				dir = RIGHT;
+		}
+	}
+	if((*this)[Minotaur].connected(dir)){
+		Minotaur = Minotaur.move(dir);
+	}
 	return Minotaur;
 }
 
@@ -172,19 +208,19 @@ std::vector<coord> map::BFS(coord p1,coord p2){
 		if(p1==p2) break;
 
 		//adds all possible directions to the queue
-		if(((*this)[p1].up())&& parent[p1.x()-1][p1.y()]==unvisited){
+		if(((*this)[p1].connected(UP))&& parent[p1.x()-1][p1.y()]==unvisited){
 			q.push(p1.move(UP));
 			parent[p1.x()-1][p1.y()]=p1;
 		}
-		if(((*this)[p1].down())&& parent[p1.x()+1][p1.y()]==unvisited){
+		if(((*this)[p1].connected(DOWN))&& parent[p1.x()+1][p1.y()]==unvisited){
 			q.push(p1.move(DOWN));
 			parent[p1.x()+1][p1.y()]=p1;
 		}
-		if(((*this)[p1].left())&& parent[p1.x()][p1.y()-1]==unvisited){
+		if(((*this)[p1].connected(LEFT))&& parent[p1.x()][p1.y()-1]==unvisited){
 			q.push(p1.move(LEFT));
 			parent[p1.x()][p1.y()-1]=p1;
 		}
-		if(((*this)[p1].right())&& parent[p1.x()][p1.y()+1]==unvisited){
+		if(((*this)[p1].connected(RIGHT))&& parent[p1.x()][p1.y()+1]==unvisited){
 			q.push(p1.move(RIGHT));
 			parent[p1.x()][p1.y()+1]=p1;
 		}
@@ -297,6 +333,34 @@ void map::generate_loops(int n){
 		keys.push_back(key);
 
 	}
+	for(int i=0;i<3*n;i++){
+		door.set(rand()%h(),rand()%w());
+		dirs.clear();
+		for(int k=0;k<4;k++){
+			if(	((!(*this)[door].connected(direction[k])) &&
+			 	((*this)[door].get_lock_dir()!= direction[k]) &&
+				(can_move(door,direction[k])))
+			)
+			{
+				dirs.push_back(direction[k]);
+			}
+		}
+		if(dirs.size() > 0){
+			new_dir = dirs[rand()%dirs.size()];
+			printf("%d\n",new_dir);
+			t[door.x()][door.y()].add_dir(new_dir);
+			door = door.move(new_dir);
+			if(new_dir > DOWN) {
+				new_dir = new_dir ^ (LEFT | RIGHT);
+			}else{
+				new_dir = new_dir ^ (UP | DOWN);
+			}
+			t[door.x()][door.y()].add_dir(new_dir);
+		}else{
+			i--;
+		}
+	}
+	animate(coord(-1,-1),coord(-1,-1));
 }
 
 void map::DFS(coord pos){
@@ -341,7 +405,7 @@ void map::animate(coord pos,coord mino){
 	for(int i=0;i<h();i++){
 		for(int j=0;j<w();j++){
 			p.set(i,j);
-			printf(" %c ",((*this)[p].up())?'.':' ');
+			printf(" %c ",((*this)[p].connected(UP))?'.':' ');
 		}
 		printf("\n");
 		for(int j=0;j<w();j++){
@@ -356,12 +420,12 @@ void map::animate(coord pos,coord mino){
 			}
 			if(p==pos) b=6;
 			else if(p == mino) b = 7;
-			printf("%c%c%c",((*this)[p].left())?'.':' ',body[b],((*this)[p].right())?'.':' ');
+			printf("%c%c%c",((*this)[p].connected(LEFT))?'.':' ',body[b],((*this)[p].connected(RIGHT))?'.':' ');
 		}
 		printf("\n");
 		for(int j=0;j<w();j++){
 			p.set(i,j);
-			printf(" %c ",((*this)[p].down())?'.':' ');
+			printf(" %c ",((*this)[p].connected(DOWN))?'.':' ');
 		}
 		printf("\n");
 	}
