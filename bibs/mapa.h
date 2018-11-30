@@ -62,6 +62,9 @@ public:
 	//pretty draw of the map
 	void draw() {animate(coord(-1,-1),coord(-1,-1));}
 	void animate(coord,coord);
+
+	void save(std::ofstream&);
+	void read(std::ifstream&);
 };
 
 #endif

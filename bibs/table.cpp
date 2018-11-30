@@ -62,3 +62,17 @@ table table::operator = (table&& other){
 	for(int i=0;i<TABLESIZE;i++) reaction[i] = other.reaction[i];
 	return *this;
 }
+
+void table::save(std::ofstream& f){
+	for(int i=0;i<TABLESIZE;i++){
+		f << (int)reaction[i];
+		f << ' ';
+	}
+	f << '\n';
+}
+
+void table::read(std::ifstream& f){
+	for(int i=0;i<TABLESIZE;i++){
+		f >> reaction[i];
+	}
+}

@@ -34,6 +34,19 @@ public:
         return dir&direc;
     }
 
+    void save(std::ofstream& f){
+	    int val = lock_dir;
+	    val = (val << 8) + dir;
+	    f << val;
+	    f << '\t';
+    }
+
+    void read(std::ifstream& f){
+	    int val;
+	    f >> val;
+	    dir = val&255;
+	    lock_dir = val >> 8;
+    }
 };
 
 #endif

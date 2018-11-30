@@ -44,4 +44,7 @@ public:
 	table operator = (const table& other);
 	table operator = (table&& other);
 	char operator[] (int val) const {return reaction[val];}
+
+	void save(std::ofstream&);
+	void read(std::ifstream&);
 };

@@ -14,6 +14,12 @@ int main(int argc,char** argv){
 //	srand(time(NULL));
     if(processed[HELP]){
         print_help(argv[0]);
+	runner r(g);
+	std::ifstream f;
+	f.open("best");
+	r.read(f);
+	f.close();
+	r.animate();
     }else{
         g.gen_map(10);
         for(int i=0;i<400;i++){
@@ -23,9 +29,12 @@ int main(int argc,char** argv){
 	t.gen_random();
 //	t.debug();
         evolutivo<runner> e(ind,processed[TIPO_TRANSA],processed[COND_FIM]);
-	printf("%d\n",processed[GEN_AMNT]);
 	e.itera(processed[GEN_AMNT],processed[VERBOSE]);
-	e.get_best().animate();
+	std::ofstream f;
+	f.open("best");
+	e.get_best().save(f);
+	f.close();
+	//e.get_best().animate();
     }
     return 0;
 }

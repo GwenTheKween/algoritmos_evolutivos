@@ -86,7 +86,7 @@ void robo::animate(map& m, std::vector<coord>& mino){
     unsigned int k=0,tmp;
     coord end(0,0);
     for(unsigned int i=0;i<path.size();i++){
-        system("clear");
+        //system("clear");
 	path[i].debug();
 	mino[i].debug('\n');
 		m.animate(path[i],mino[i]);
@@ -105,4 +105,36 @@ void robo::animate(map& m, std::vector<coord>& mino){
 	gene[k].debug('\n');
         wait(100);
     }
+}
+
+void robo::save(std::ofstream& f){
+	f << gene.size();
+	f << '\n';
+	for(unsigned int i=0;i<gene.size();i++){
+		gene[i].save(f);
+		gene[i].debug('\n');
+	}
+	f << path.size();
+	f << '\n';
+	for(unsigned int i=0;i<path.size();i++){
+		path[i].save(f);
+	}
+	t.save(f);
+}
+
+void robo::read(std::ifstream& f){
+	int size;
+	coord tmp;
+	f >> size;
+	gene.clear();
+	for(int i=0;i<size;i++){
+		tmp.read(f);
+		gene.push_back(tmp);
+	}
+	f >> size;
+	for(int i=0; i<size;i++){
+		tmp.read(f);
+		path.push_back(tmp);
+	}
+	t.read(f);
 }

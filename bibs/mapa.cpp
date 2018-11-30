@@ -347,7 +347,6 @@ void map::generate_loops(int n){
 		}
 		if(dirs.size() > 0){
 			new_dir = dirs[rand()%dirs.size()];
-			printf("%d\n",new_dir);
 			t[door.x()][door.y()].add_dir(new_dir);
 			door = door.move(new_dir);
 			if(new_dir > DOWN) {
@@ -430,4 +429,67 @@ void map::animate(coord pos,coord mino){
 		printf("\n");
 	}
 	return;
+}
+
+void map::save(std::ofstream& f){
+	f << height;
+	f << ' ';
+	f << width;
+	f << '\n';
+	for(unsigned int i=0;i<t.size();i++){
+		for(unsigned int j=0;j<t[i].size();j++){
+			t[i][j].save(f);
+		}
+	}
+	f << '\n';
+	f << doors.size();
+	f << '\n';
+	for(unsigned int i=0;i<doors.size();i++){
+		doors[i].save(f);
+	}
+	f << keys.size();
+	f << '\n';
+	for(unsigned int i=0;i<keys.size();i++){
+		keys[i].save(f);
+	}
+	initMinotaur.save(f);
+	Minotaur.save(f);
+}
+
+void map::read(std::ifstream& f){
+	tile tmp_tile;
+	std::vector<tile> tmp_vec;
+	coord tmp_coord;
+	int size;
+	//clear all previous data
+	for(int i=0;i<width;i++){
+		t[i].clear();
+	}
+	t.clear();
+	doors.clear();
+	keys.clear();
+
+	//loads new data
+	f >> height;
+	f >> width;
+	for(int i = 0;i < height; i++){
+		for(int j = 0; j<width; j++){
+			tmp_tile.read(f);
+			tmp_vec.push_back(tmp_tile);
+		}
+		t.push_back(tmp_vec);
+		tmp_vec.clear();
+	}
+	f >> size;
+	for(int i = 0; i<size;i++){
+		tmp_coord.read(f);
+		doors.push_back(tmp_coord);
+	}
+	f >> size;
+	for(int i=0;i<size;i++){
+		tmp_coord.read(f);
+		keys.push_back(tmp_coord);
+	}
+	initMinotaur.read(f);
+	Minotaur.read(f);
 }

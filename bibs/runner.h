@@ -19,4 +19,7 @@ public:
 	runner transa(runner&,int);
 	void mutacao(int);
 	void animate();
+
+	void save(std::ofstream&);
+	void read(std::ifstream&);
 };

@@ -3,8 +3,8 @@
 runner::runner(runner const& r):
 	robo::robo(r),
 	m(r.m),
-	position(0,0),
-	keys_acquired(0),
+	position(r.position),
+	keys_acquired(r.keys_acquired),
 	mino_path(r.mino_path)
 {
 }
@@ -12,8 +12,8 @@ runner::runner(runner const& r):
 runner::runner(runner&& r):
 	robo::robo(r),
 	m(r.m),
-	position(0,0),
-	keys_acquired(0),
+	position(r.position),
+	keys_acquired(r.keys_acquired),
 	mino_path(r.mino_path)
 {
 }
@@ -40,6 +40,8 @@ int runner::avalia(){
 	int score = 0,movement;
 	int observed;
 	std::vector<coord> pth;
+	position.set(0,0);
+	keys_acquired = 0;
 	pth.push_back(position);
 	mino_path.clear();
 	mino_path.push_back(m.get_Minotaur());
@@ -79,7 +81,7 @@ int runner::avalia(){
 		pth.push_back(position);
 		mino_path.push_back(Mino);
 		if(position == Mino){
-			score -= 1000;
+			score -= 800;
 			break;
 		}
 	}
@@ -118,4 +120,33 @@ void runner::mutacao(int amnt){
 
 void runner::animate(){
 	robo::animate(m,mino_path);
+}
+
+void runner::save(std::ofstream& f){
+	m.save(f);
+	position.save(f);
+	position.debug();
+	f << keys_acquired;
+	f << '\n';
+	f << mino_path.size();
+	f << '\n';
+	std::cout << keys_acquired << '\t' << mino_path.size()<<'\n';
+	for(unsigned int i = 0;i<mino_path.size(); i++){
+		mino_path[i].save(f);
+	}
+	robo::save(f);
+}
+
+void runner::read(std::ifstream& f){
+	int size;
+	coord tmp;
+	m.read(f);
+	position.read(f);
+	f >> keys_acquired;
+	f >> size;
+	for(int i=0 ;i<size;i++){
+		tmp.read(f);
+		mino_path.push_back(tmp);
+	}
+	robo::read(f);
 }

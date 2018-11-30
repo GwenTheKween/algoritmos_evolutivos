@@ -3,6 +3,7 @@
 #define COORD_HEADER
 
 #include <iostream>
+#include <fstream>
 
 //directions and their respective bits
 enum{
@@ -76,6 +77,18 @@ public:
 
     void debug(char c='\t'){
         std::cout<<'('<<X<<','<<Y<<')'<<c;
+    }
+
+    void save(std::ofstream& f){
+	    f << X;
+	    f << ' ';
+	    f << Y;
+	    f << '\n';
+    }
+
+    void read(std::ifstream& f){
+	    f >> X;
+	    f >> Y;
     }
 };
 
