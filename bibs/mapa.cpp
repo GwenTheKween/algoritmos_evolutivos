@@ -273,10 +273,10 @@ void map::reset(){
 
 void map::gen_map(int n){
 	coord pos(rand() % height, rand() % width);
-	DFS(pos);
-	generate_loops(n);
 	Minotaur.set(rand()%height,rand()%width);
 	initMinotaur = Minotaur;
+	DFS(pos);
+	generate_loops(n);
 }
 
 void map::generate_loops(int n){
@@ -284,6 +284,31 @@ void map::generate_loops(int n){
 	std::vector<int> dirs;
 	bool already_chosen;
 	int new_dir;
+	for(int i=0;i<3*n;i++){ //first, generate new loops
+		door.set(rand()%h(),rand()%w());
+		dirs.clear();
+		for(int k=0;k<4;k++){
+			if(	(!(*this)[door].connected(direction[k])) &&
+				(can_move(door,direction[k]))
+			  )
+			{
+				dirs.push_back(direction[k]);
+			}
+		}
+		if(dirs.size() > 0){
+			new_dir = dirs[rand()%dirs.size()];
+			t[door.x()][door.y()].add_dir(new_dir);
+			door = door.move(new_dir);
+			if(new_dir > DOWN) {
+				new_dir = new_dir ^ (LEFT | RIGHT);
+			}else{
+				new_dir = new_dir ^ (UP | DOWN);
+			}
+			t[door.x()][door.y()].add_dir(new_dir);
+		}else{
+			i--;
+		}
+	}
 	for(int i=0;i<n;i++){
 		door.set(rand()%h(),rand()%w());
 
@@ -333,33 +358,7 @@ void map::generate_loops(int n){
 		keys.push_back(key);
 
 	}
-	for(int i=0;i<3*n;i++){
-		door.set(rand()%h(),rand()%w());
-		dirs.clear();
-		for(int k=0;k<4;k++){
-			if(	((!(*this)[door].connected(direction[k])) &&
-			 	((*this)[door].get_lock_dir()!= direction[k]) &&
-				(can_move(door,direction[k])))
-			)
-			{
-				dirs.push_back(direction[k]);
-			}
-		}
-		if(dirs.size() > 0){
-			new_dir = dirs[rand()%dirs.size()];
-			t[door.x()][door.y()].add_dir(new_dir);
-			door = door.move(new_dir);
-			if(new_dir > DOWN) {
-				new_dir = new_dir ^ (LEFT | RIGHT);
-			}else{
-				new_dir = new_dir ^ (UP | DOWN);
-			}
-			t[door.x()][door.y()].add_dir(new_dir);
-		}else{
-			i--;
-		}
-	}
-	animate(coord(-1,-1),coord(-1,-1));
+	animate(coord(0,0),Minotaur);
 }
 
 void map::DFS(coord pos){
@@ -417,8 +416,8 @@ void map::animate(coord pos,coord mino){
 					b=2*(lock_dir==UP)+3*(lock_dir==DOWN)+4*(lock_dir==LEFT)+5*(lock_dir==RIGHT);
 				}
 			}
-			if(p==pos) b=6;
-			else if(p == mino) b = 7;
+			if(p == mino) b = 7;
+			else if(p==pos) b=6;
 			printf("%c%c%c",((*this)[p].connected(LEFT))?'.':' ',body[b],((*this)[p].connected(RIGHT))?'.':' ');
 		}
 		printf("\n");
@@ -432,6 +431,7 @@ void map::animate(coord pos,coord mino){
 }
 
 void map::save(std::ofstream& f){
+	reset();
 	f << height;
 	f << ' ';
 	f << width;

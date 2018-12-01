@@ -45,6 +45,7 @@ public:
     void connect(char, coord);
     int look_around(coord);
     coord updateMinotaur(coord);
+    void resetMinotaur(){Minotaur = initMinotaur;}
 
     //return the smallest path from p1 to p2 EXCLUDING P1
     std::vector<coord> BFS(coord p1,coord p2);

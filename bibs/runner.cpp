@@ -44,6 +44,7 @@ int runner::avalia(){
 	keys_acquired = 0;
 	pth.push_back(position);
 	mino_path.clear();
+	//m.resetMinotaur();
 	mino_path.push_back(m.get_Minotaur());
 	key_location = get_gene()[0];
 	while(score < 1000){
@@ -125,12 +126,10 @@ void runner::animate(){
 void runner::save(std::ofstream& f){
 	m.save(f);
 	position.save(f);
-	position.debug();
 	f << keys_acquired;
 	f << '\n';
 	f << mino_path.size();
 	f << '\n';
-	std::cout << keys_acquired << '\t' << mino_path.size()<<'\n';
 	for(unsigned int i = 0;i<mino_path.size(); i++){
 		mino_path[i].save(f);
 	}
