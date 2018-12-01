@@ -6,8 +6,9 @@ private:
 	map m;
 	coord position;
 	int keys_acquired;
+	std::vector<coord> mino_path;
 public:
-	runner(map& model):robo(model),m(model),position(0,0),keys_acquired(0){}
+	runner(map& model):robo(model),m(model),position(0,0),keys_acquired(0),mino_path(){}
 	runner(runner const&);
 	runner(runner&&);
 
@@ -18,4 +19,7 @@ public:
 	runner transa(runner&,int);
 	void mutacao(int);
 	void animate();
+
+	void save(std::ofstream&);
+	void read(std::ifstream&);
 };

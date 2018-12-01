@@ -34,17 +34,18 @@ public:
         return dir&direc;
     }
 
-    bool up(){ // if the tile is connected upwards
-        return dir&UP;
+    void save(std::ofstream& f){
+	    int val = lock_dir;
+	    val = (val << 8) + dir;
+	    f << val;
+	    f << '\t';
     }
-    bool down(){ // if the tile is connected downwards
-        return dir&DOWN;
-    }
-    bool left(){ // if the tile is connected leftwards
-        return dir&LEFT;
-    }
-    bool right(){ // if the tile is connected rightwards
-        return dir&RIGHT;
+
+    void read(std::ifstream& f){
+	    int val;
+	    f >> val;
+	    dir = val&255;
+	    lock_dir = val >> 8;
     }
 };
 

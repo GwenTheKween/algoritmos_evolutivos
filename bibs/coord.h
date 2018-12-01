@@ -3,6 +3,7 @@
 #define COORD_HEADER
 
 #include <iostream>
+#include <fstream>
 
 //directions and their respective bits
 enum{
@@ -56,9 +57,38 @@ public:
         else if(dir == RIGHT) return coord(X,Y+1);
 		return coord(-1,-1);
     }
+    
+    int relative_dir(coord c){
+	    if(X > c.X){
+		    if(Y > c.Y) return 0;
+		    if(Y == c.Y) return 1;
+		    return 2;
+	    }else if(X == c.X){
+		    if(Y > c.Y) return 3;
+		    //it is impossible to have X and Y equal at the same time
+		    return 4;
+	    }else{
+		    if(Y > c.Y) return 5;
+		    if(Y == c.Y) return 6;
+		    return 7;
+	    }
+	    return -1;
+    }
 
     void debug(char c='\t'){
         std::cout<<'('<<X<<','<<Y<<')'<<c;
+    }
+
+    void save(std::ofstream& f){
+	    f << X;
+	    f << ' ';
+	    f << Y;
+	    f << '\n';
+    }
+
+    void read(std::ifstream& f){
+	    f >> X;
+	    f >> Y;
     }
 };
 

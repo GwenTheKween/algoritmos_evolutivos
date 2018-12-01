@@ -125,7 +125,6 @@ template<class type>void evolutivo<type>::itera(int n,bool verbose){
 		if(nuclear_countdown <= 0){
 			nuke();
 		}
-
         	gen++;
 	}
 }
@@ -151,7 +150,7 @@ template<class type> std::vector<type> evolutivo<type>::transa_por_elitismo(){
 	//faz ele transar com todo mundo e avalia os filhos
 	for(unsigned int i=0;i<individuo.size();i++){
 		if(i!=best){
-			nova_geracao.push_back(individuo[i].transa(individuo[best],range));
+			nova_geracao.push_back(individuo[i].transa(individuo[best],range*stable_count));
 		}else{
 			nova_geracao.push_back(individuo[i]);
 		}

@@ -13,6 +13,9 @@ enum ARGV{
 	HELP,
     GEN_AMNT,
     MUT_RANGE,
+    ANIMATE,
+    SAVE,
+    READ,
 	SIZE_ARGV       //how many arguments are accepted at most
 };
 
@@ -71,24 +74,36 @@ void proc_argv(int argc,char** argv,int* proc){
 						proc[TIPO_TRANSA]=TORNEIO;
 					}
 				}
-            }else if(s=="-f"){ //the user wants a ficed amount of generations to be run
-                proc[COND_FIM]=FIXED;
-            }else if(s=="-s"){ //the user wants the simulation to stop after it has stabilized for a certain amount of generations
-                proc[COND_FIM]=STABLE;
+           		}else if(s=="-f"){ //the user wants a ficed amount of generations to be run
+		                proc[COND_FIM]=FIXED;
+	   		}else if(s=="-s"){ //the user wants the simulation to stop after it has stabilized for a certain amount of generations
+        	        	proc[COND_FIM]=STABLE;
 			}else if(s=="-n"){ //the amount of generations was specified
-                i++;
+        		        i++;
 				if(i<argc){ //ensures that the user passed an extra argument for the cross-over
-                    proc[GEN_AMNT]=atoi(argv[i]);
-                }
-            }else if(s=="-m"){//the mutation range was specified
-                i++;
+	        	            proc[GEN_AMNT]=atoi(argv[i]);
+		                }
+            		}else if(s=="-m"){//the mutation range was specified
+                		i++;
 				if(i<argc){ //ensures that the user passed an extra argument for the cross-over
-                    proc[MUT_RANGE]=atoi(argv[i]);
-                }
-            }
+                    			proc[MUT_RANGE]=atoi(argv[i]);
+                		}
+            		}else if(s=="-a"){ //The runner will be simulated at the end of the run
+				proc[ANIMATE]=1;
+			}else if(s=="-o"){ //The user wishes to save, the file name must be the next argument
+				i++;
+				if(i<argc){
+					proc[SAVE] = i;
+				}
+			}else if(s=="-i"){ //The user wishes to simulate a runner from a file, the next argument ,ust be the file name
+				i++;
+				if(i<argc){
+					proc[READ] = i;
+				}
+			}
 		}
 	}
-	if(!(proc[TIPO_TRANSA]&&proc[COND_FIM])) proc[HELP]=1; //if the cross-over or the end condition was not set, the simulation won't run and the help screen will be printed
+	if(!((proc[TIPO_TRANSA]&&proc[COND_FIM]) || proc[READ])) proc[HELP]=1; //if the cross-over or the end condition was not set, the simulation won't run and the help screen will be printed
 }
 
 
@@ -109,7 +124,9 @@ void print_help(char* prog_name){
 	printf("\t-h: show this page\n");
     printf("\t-n <num>: number of generations to be simulated, if -f is chosen, or maximum number of stable generations, if -s is chosen\n");
     printf("\t-m <num>: range of motation times 100\n");
-	printf("\n\nPS: roleta is not fully implemented yet\n");
+	printf("\t-o <file>: file to save the runner to, once the simulation is over\n");
+	printf("\t-i <file>: file to read the runner from, instead of evolving everything from scratch\n");
+	printf("\t-a: if the end of the evolution will be animated\n");
 }
 
 #endif

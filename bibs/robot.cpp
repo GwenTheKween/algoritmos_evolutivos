@@ -82,21 +82,63 @@ void robo::mutacao(){
     path.clear();
 }
 
-void robo::animate(map& m){
+void robo::animate(map& m, std::vector<coord>& mino){
     unsigned int k=0,tmp;
     coord end(0,0);
     for(unsigned int i=0;i<path.size();i++){
-        system("clear");
-		m.animate(path[i]);
+        //system("clear");
+	path[i].debug();
+	mino[i].debug('\n');
+		m.animate(path[i],mino[i]);
         if(k<gene.size() && path[i] == gene[k]){
-            k++;
-			i--;
+		m.unlock(gene[k]);
+            	k++;
+		i--;
         }
-//        if(k<gene.size())gene[k].debug(' ');
-//        else end.debug(' ');
-        printf("%lu\n",path.size());
+	printf("Total steps: %d\n",path.size());
+        printf("current steps:%d, keys acquired: %d\n",i,k);
 	tmp = m.look_around(path[i]);
-	printf("%04x,%d: (%d,%d,%d,%d)\n",tmp,t[tmp],(tmp & CONNECTED & NORTH),(tmp & CONNECTED & SOUTH),(tmp & CONNECTED & EAST),(tmp & CONNECTED & WEST));
+	tmp &= 0x00ff;
+	tmp |= path[i].relative_dir(mino[i]) << MINOTAUR;
+	tmp |= path[i].relative_dir(gene[k]) << KEY_DIR;
+	printf("(%x,%x,%x,%x,%x,%x): ",tmp & NORTH,(tmp & SOUTH)>>2,(tmp & EAST)>>4,(tmp & WEST)>>6,(tmp>>8)&0x7,(tmp>>11));
+	if(t[tmp]==MOVE_UP) printf("move up\n");
+	else if(t[tmp] == MOVE_DOWN) printf("move down\n");
+	else if(t[tmp] == MOVE_LEFT) printf("move left\n");
+	else if(t[tmp] == MOVE_RIGHT) printf("move right\n");
+	else printf("something wrong aint right\n");
+	gene[k].debug('\n');
         wait(100);
     }
+}
+
+void robo::save(std::ofstream& f){
+	f << gene.size();
+	f << '\n';
+	for(unsigned int i=0;i<gene.size();i++){
+		gene[i].save(f);
+	}
+	f << path.size();
+	f << '\n';
+	for(unsigned int i=0;i<path.size();i++){
+		path[i].save(f);
+	}
+	t.save(f);
+}
+
+void robo::read(std::ifstream& f){
+	int size;
+	coord tmp;
+	f >> size;
+	gene.clear();
+	for(int i=0;i<size;i++){
+		tmp.read(f);
+		gene.push_back(tmp);
+	}
+	f >> size;
+	for(int i=0; i<size;i++){
+		tmp.read(f);
+		path.push_back(tmp);
+	}
+	t.read(f);
 }

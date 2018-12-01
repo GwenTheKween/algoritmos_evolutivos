@@ -23,12 +23,6 @@ void table::gen_random(){
 
 		if(i & (CONNECTED & WEST)) valid.push_back(MOVE_LEFT);
 
-		/*
-		valid.push_back(MOVE_UP);
-		valid.push_back(MOVE_DOWN);
-		valid.push_back(MOVE_LEFT);
-		valid.push_back(MOVE_RIGHT);
-		*/
 
 		if(valid.size() > 0){
 			val = valid[rand()%valid.size()];
@@ -67,4 +61,18 @@ table table::operator = (const table& other){
 table table::operator = (table&& other){
 	for(int i=0;i<TABLESIZE;i++) reaction[i] = other.reaction[i];
 	return *this;
+}
+
+void table::save(std::ofstream& f){
+	for(int i=0;i<TABLESIZE;i++){
+		f << (int)reaction[i];
+		f << ' ';
+	}
+	f << '\n';
+}
+
+void table::read(std::ifstream& f){
+	for(int i=0;i<TABLESIZE;i++){
+		f >> reaction[i];
+	}
 }

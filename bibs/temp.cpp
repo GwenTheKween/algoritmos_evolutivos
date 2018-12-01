@@ -10,23 +10,32 @@ int main(int argc,char** argv){
     int processed[SIZE_ARGV];
     std::vector<runner> ind;
     proc_argv(argc,argv,processed);
-//	srand(6);
-	srand(time(NULL));
+	srand(3);
+//	srand(time(NULL));
     if(processed[HELP]){
         print_help(argv[0]);
+    }else if(processed[READ]){
+	runner r(g);
+	std::ifstream f;
+	f.open(argv[processed[READ]]);
+	r.read(f);
+	f.close();
+	r.animate();
     }else{
         g.gen_map(10);
         for(int i=0;i<400;i++){
             ind.push_back(runner(g));
         }
-	table t;
-	t.gen_random();
-//	t.debug();
-	g.animate(coord(0,0));
         evolutivo<runner> e(ind,processed[TIPO_TRANSA],processed[COND_FIM]);
-	printf("%d\n",processed[GEN_AMNT]);
 	e.itera(processed[GEN_AMNT],processed[VERBOSE]);
-	e.get_best().animate();
+	if(processed[SAVE]){
+		std::ofstream f;
+		f.open(argv[processed[SAVE]]);
+		e.get_best().save(f);
+		f.close();
+	}
+	if(processed[ANIMATE])
+		e.get_best().animate();
     }
     return 0;
 }
